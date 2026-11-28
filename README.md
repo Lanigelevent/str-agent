@@ -6,6 +6,8 @@
 ![MCP](https://img.shields.io/badge/MCP-2026--07--28-green.svg)
 ![Tests](https://img.shields.io/badge/tests-1500%2B-brightgreen.svg)
 
+中文 | **[English](README.en.md)**
+
 > 把「导入数据 → 清洗 → 算指标 → 生成中文行业报告」交给一次工具调用——
 > **报告里每一个数字都被机器校验、可回溯到原始行**。技术上是一个纯 JVM agent 插件，
 > 装配为无头 MCP 服务器（stdio / Streamable HTTP 双传输），即插即用进任何 MCP 客户端。
