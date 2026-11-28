@@ -1,0 +1,25 @@
+# 行尾策略：仓库内文本一律 LF，fresh clone 也必须得到与基线一致的字节。
+# 背景：fixtures/ 下的 CSV/JSON 是逐字节比对的金标（门 A / 门 B / CsvParserAlignmentTest），
+# Windows 的 core.autocrlf=true 会在 checkout 时把 LF 换成 CRLF，导致同一提交在
+# 本机工作区通过、在干净 clone 上失败（T-023 首次 CI 实跑抓到的真实缺陷）。
+* text=auto eol=lf
+
+# Windows 批处理必须 CRLF，否则 cmd 解析多行块会出错
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# 二进制：不做行尾/编码转换
+*.jar binary
+*.zip binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.xls binary
+*.xlsx binary
+*.docx binary
+*.pptx binary
+*.parquet binary

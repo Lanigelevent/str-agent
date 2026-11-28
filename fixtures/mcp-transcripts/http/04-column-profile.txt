@@ -1,0 +1,14 @@
+> POST /mcp
+> content-type: application/json
+> authorization: Bearer __MCP_TOKEN__
+> mcp-session-id: sess-snapshot-baseline
+> request-body <<<<
+{"jsonrpc":"2.0","id":4,"params":{"name":"stragent_get_column_profile","arguments":{"datasetId":"ds_0d3292889a39"}},"method":"tools/call"}
+< status: 200
+< content-type: application/json; charset=utf-8
+< mcp-protocol-version: 2026-07-28
+< warning: 299 - "Mcp-Session-Id is deprecated since 2026-07-28; removed after 2027-07-28"
+< x-content-type-options: nosniff
+< x-frame-options: DENY
+< body <<<<
+{"jsonrpc":"2.0","id":4,"result":{"resultType":"complete","content":[{"type":"text","text":"{\"dataset\":\"ds_0d3292889a39\",\"total\":2,\"returned\":2,\"items\":[{\"name\":\"门店\",\"type\":\"text\",\"count\":3,\"missing\":0,\"distinct\":2},{\"name\":\"销售额\",\"type\":\"number\",\"count\":3,\"missing\":0}]}"}],"structuredContent":{"dataset":"ds_0d3292889a39","total":2,"returned":2,"items":[{"name":"门店","type":"text","count":3,"missing":0,"distinct":2},{"name":"销售额","type":"number","count":3,"missing":0}]}}}

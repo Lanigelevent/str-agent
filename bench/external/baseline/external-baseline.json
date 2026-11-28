@@ -1,0 +1,1 @@
+{"benchmark":"spider2-lite-sqlite-subset","capability":"sql-execution-only","passed":49,"total":49,"tolerancePct":5.0,"knownFailures":["local331"],"recordedAt":"2026-11-05T15:35:59.558080600Z"}

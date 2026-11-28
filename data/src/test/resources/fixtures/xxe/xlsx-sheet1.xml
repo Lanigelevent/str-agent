@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  XXE 回归夹具 · xlsx 的 xl/worksheets/sheet1.xml（T-140）
+
+  与 docx 夹具同构：声明指向本地文件的外部实体并在单元格里引用它。
+  `__XXE_ENTITY_URI__` 由测试在运行时替换成绝对 file:// URI（理由见 docx 夹具的注释）。
+-->
+<!DOCTYPE worksheet [
+  <!ENTITY xxe SYSTEM "__XXE_ENTITY_URI__">
+]>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <sheetData>
+    <row r="1">
+      <c r="A1" t="inlineStr"><is><t>表头列</t></is></c>
+      <c r="B1" t="inlineStr"><is><t>&xxe;</t></is></c>
+    </row>
+    <row r="2">
+      <c r="A2" t="inlineStr"><is><t>单元格内容</t></is></c>
+      <c r="B2"><v>42</v></c>
+    </row>
+  </sheetData>
+</worksheet>

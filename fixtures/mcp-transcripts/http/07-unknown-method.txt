@@ -1,0 +1,14 @@
+> POST /mcp
+> content-type: application/json
+> authorization: Bearer __MCP_TOKEN__
+> mcp-session-id: sess-snapshot-baseline
+> request-body <<<<
+{"jsonrpc":"2.0","id":7,"method":"tools/unknown"}
+< status: 404
+< content-type: application/json; charset=utf-8
+< mcp-protocol-version: 2026-07-28
+< warning: 299 - "Mcp-Session-Id is deprecated since 2026-07-28; removed after 2027-07-28"
+< x-content-type-options: nosniff
+< x-frame-options: DENY
+< body <<<<
+{"jsonrpc":"2.0","id":7,"error":{"code":-32601,"message":"未知方法：tools/unknown"}}

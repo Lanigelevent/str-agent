@@ -1,0 +1,14 @@
+> POST /mcp
+> content-type: application/json
+> authorization: Bearer __MCP_TOKEN__
+> mcp-session-id: sess-snapshot-baseline
+> request-body <<<<
+{"jsonrpc":"2.0","id":6,"params":{"name":"stragent_list_rows","arguments":{"datasetId":"ds_0d3292889a39","offset":0,"limit":2}},"method":"tools/call"}
+< status: 200
+< content-type: application/json; charset=utf-8
+< mcp-protocol-version: 2026-07-28
+< warning: 299 - "Mcp-Session-Id is deprecated since 2026-07-28; removed after 2027-07-28"
+< x-content-type-options: nosniff
+< x-frame-options: DENY
+< body <<<<
+{"jsonrpc":"2.0","id":6,"result":{"resultType":"complete","content":[{"type":"text","text":"{\"dataset\":\"ds_0d3292889a39\",\"total\":3,\"returned\":2,\"offset\":0,\"rowNumberNote\":\"row 为数据行号（从 1 起，不含表头行）\",\"items\":[{\"row\":1,\"cells\":[\"华东\",\"1200.5\"]},{\"row\":2,\"cells\":[\"华南\",\"800\"]}]}"}],"structuredContent":{"dataset":"ds_0d3292889a39","total":3,"returned":2,"offset":0,"rowNumberNote":"row 为数据行号（从 1 起，不含表头行）","items":[{"row":1,"cells":["华东","1200.5"]},{"row":2,"cells":["华南","800"]}]}}}

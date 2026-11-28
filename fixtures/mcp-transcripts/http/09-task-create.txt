@@ -1,0 +1,14 @@
+> POST /mcp
+> content-type: application/json
+> authorization: Bearer __MCP_TOKEN__
+> mcp-session-id: sess-snapshot-tasks
+> request-body <<<<
+{"jsonrpc":"2.0","id":41,"params":{"name":"stragent_import_table","arguments":{"csv":"门店,销售额\n华东,1200.5\n华南,800\n华东,300","name":"任务导入"},"_meta":{"task":{},"io.modelcontextprotocol/clientCapabilities":{"extensions":{"io.modelcontextprotocol/tasks":{}}}}},"method":"tools/call"}
+< status: 200
+< content-type: application/json; charset=utf-8
+< mcp-protocol-version: 2026-07-28
+< warning: 299 - "Mcp-Session-Id is deprecated since 2026-07-28; removed after 2027-07-28"
+< x-content-type-options: nosniff
+< x-frame-options: DENY
+< body <<<<
+{"jsonrpc":"2.0","id":41,"result":{"resultType":"task","taskId":"__TASK_ID__","status":"working","createdAt":"__ISO_TS__","lastUpdatedAt":"__ISO_TS__","ttlMs":__TTL_MS__,"pollIntervalMs":1000,"tool":"stragent_import_table","pollWith":"tasks/get"}}

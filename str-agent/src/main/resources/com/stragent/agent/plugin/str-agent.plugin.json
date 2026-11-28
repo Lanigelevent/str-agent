@@ -1,0 +1,35 @@
+{
+  "id": "str-agent",
+  "name": "Str Agent",
+  "type": ["tools-capabilities", "workflows"],
+  "kind": "agent-engine",
+  "version": "1.0.0",
+  "schemaVersion": 2,
+  "description": "数据分析 Agent 引擎：报告/追问/审查/编辑部多 Agent，自带 stragent_* 能力契约与 localhost:7787 MCP 服务（任何 MCP 宿主即插即用）。纯插件形态，由宿主装载，本身不独立运行。",
+  "inject": [
+    { "id": "model", "role": "CONSUMER", "contract": "LlmClient", "description": "OpenAI 兼容 /chat/completions 推理服务（提供方：宿主或 the reference harness llm 缝）" },
+    { "id": "storage", "role": "CONSUMER", "contract": "DatasetStore", "description": "键值文档存储（报告草稿/索引；提供方：宿主 storage 缝）" },
+    { "id": "prefs", "role": "CONSUMER", "contract": "PrefsStore", "description": "键值偏好存储（提供方：宿主 prefs 缝）" },
+    { "id": "session", "role": "CONSUMER", "contract": "TraceSink", "description": "可追加的会话/轨迹日志（可选增强；宿主不提供时用内置 InsightTrace 兜底）", "required": false }
+  ],
+  "contributes": [
+    { "id": "report", "role": "PROVIDER", "contract": "agent-report", "description": "深挖/标准数据分析报告（单 Agent 或编辑部多 Agent）" },
+    { "id": "followup", "role": "PROVIDER", "contract": "agent-followup", "description": "对已有数据/报告做追问与答疑（先查数再回答）" },
+    { "id": "review", "role": "PROVIDER", "contract": "agent-review", "description": "对报告做数字归属/口径/因果/越界的确定性审查" },
+    { "id": "editorial", "role": "PROVIDER", "contract": "agent-editorial", "description": "编辑部多层级分工流水线（选题会→记者条线→主笔→核查→终审）" },
+    { "id": "mcp-bridge", "role": "PROVIDER", "contract": "service", "description": "localhost:7787 暴露 MCP Streamable HTTP（Bearer 鉴权）——任何 MCP 宿主即插即用其能力面" }
+  ],
+  "requiredHost": [
+    { "name": "llm", "type": "LlmClient", "description": "OpenAI 兼容 /chat/completions 实现" },
+    { "name": "prefs", "type": "PrefsStore", "description": "键值偏好存储" },
+    { "name": "kv", "type": "DatasetStore", "description": "键值文档存储（报告草稿/索引）" },
+    { "name": "pluginDir", "type": "File", "description": "用户插件目录（宿主提供，默认 <home>/plugins）" }
+  ],
+  "provides": [
+    { "id": "report", "kind": "agent-report", "description": "生成深挖/标准数据分析报告（单 Agent 或编辑部多 Agent）" },
+    { "id": "followup", "kind": "agent-followup", "description": "对已有数据/报告做追问与答疑（先查数再回答）" },
+    { "id": "review", "kind": "agent-review", "description": "对报告做数字归属/口径/因果/越界的确定性审查" },
+    { "id": "editorial", "kind": "agent-editorial", "description": "编辑部多层级分工（选题会→记者条线→主笔→核查→终审）" },
+    { "id": "mcp-bridge", "kind": "service", "description": "localhost:7787 暴露 MCP Streamable HTTP（Bearer 鉴权），任何 MCP 客户端可即插即用其能力面" }
+  ]
+}

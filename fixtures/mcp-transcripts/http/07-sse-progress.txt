@@ -1,0 +1,21 @@
+> POST /mcp
+> content-type: application/json
+> authorization: Bearer __MCP_TOKEN__
+> mcp-session-id: sess-snapshot-sse
+> accept: text/event-stream
+> request-body <<<<
+{"jsonrpc":"2.0","id":21,"params":{"name":"sse_probe","arguments":{},"_meta":{"progressToken":"tok-snap"}},"method":"tools/call"}
+< status: 200
+< cache-control: no-cache
+< content-type: text/event-stream; charset=utf-8
+< mcp-protocol-version: 2026-07-28
+< warning: 299 - "Mcp-Session-Id is deprecated since 2026-07-28; removed after 2027-07-28"
+< body <<<<
+data: {"jsonrpc":"2.0","method":"notifications/progress","params":{"progressToken":"tok-snap","progress":1,"message":"快照进度第1帧"}}
+
+data: {"jsonrpc":"2.0","method":"notifications/progress","params":{"progressToken":"tok-snap","progress":2,"message":"快照进度第2帧"}}
+
+data: {"jsonrpc":"2.0","method":"notifications/progress","params":{"progressToken":"tok-snap","progress":3,"message":"快照进度第3帧"}}
+
+data: {"jsonrpc":"2.0","id":21,"result":{"resultType":"complete","content":[{"type":"text","text":"{\"text\":\"sse-probe-done\"}"}],"structuredContent":{"text":"sse-probe-done"}}}
+

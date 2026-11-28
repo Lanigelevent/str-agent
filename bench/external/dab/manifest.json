@@ -1,0 +1,6 @@
+{
+  "suite": "external-dab-bench",
+  "status": "awaiting-dataset",
+  "notes": "DAB（DataAgentBench）子集题面清单。数据集不进仓（T-057 Spider 同口径）：接入时补 tasks 题目与数据目录（STRAGENT_BENCH_EXTERNAL_DIR 或 bench/external/data/dab/），套件零改动。数据缺省时套件显式 SKIP（退出 0、评分卡不含通过数）。",
+  "tasks": []
+}

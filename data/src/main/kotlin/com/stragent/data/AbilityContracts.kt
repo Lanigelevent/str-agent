@@ -1,0 +1,41 @@
+package com.stragent.data
+
+/** Str Agent 独立定义的四条能力契约（方法名 stragent_*）。str agent 已是与 the upstream host project/stepx 平级的独立项目，契约文案与 schema 由本仓库直接维护，不再由上游生成。 */
+data class AbilityContract(
+    val method: String,
+    val description: String,
+    val inputSchemaJson: String,
+    val timeoutSeconds: Int,
+    val execType: String,
+)
+
+val ABILITY_CONTRACTS: List<AbilityContract> = listOf(
+    AbilityContract(
+        method = "stragent_import_table",
+        description = "导入一段分隔文本表格（CSV/TSV，自动探测分隔符，支持引号转义）并在本机完成统计分析，返回数据集编号与列清单。需要把一份表格交给Str Agent做后续分析（列画像 stragent_get_column_profile、分组聚合 stragent_get_group_aggregate、行级溯源 stragent_list_rows）时用。参数 csv 表示表格文本内容（第一行为表头），必填，最多 10000 行；参数 name 表示数据集名称，缺省为「未命名数据」。同一内容重复导入返回同一 datasetId（幂等，不产生重复数据集）。返回 {datasetId, name, rows, columns, columnList, truncated, validRows, density}：rows 为数据行数，columnList 为列名与推断类型（number/text），truncated 表示超出 10000 行被截断，validRows 与 density 是全量口径的有效行数与单元格密度。",
+        inputSchemaJson = "{\"type\":\"object\",\"properties\":{\"csv\":{\"type\":\"string\",\"description\":\"作用: 表格文本，第一行为表头。缺省处理: 必填，无默认值。例值: \\\"门店,销售额\\\\n东店,1200\\\"\"},\"name\":{\"type\":\"string\",\"description\":\"作用: 数据集名称。缺省处理: 未传按「未命名数据」。例值: 10月销售明细\"}},\"required\":[\"csv\"]}",
+        timeoutSeconds = 30,
+        execType = "LOCAL",
+    ),
+    AbilityContract(
+        method = "stragent_get_column_profile",
+        description = "返回数据集某列或全部列的统计画像。写结论前需要知道某列的均值、样本量、最值或取值分布时用。参数 datasetId 表示数据集编号（stragent_import_table 返回），必填；参数 column 表示列名，缺省时返回全部列的概要（最多 50 列，超出时必须逐列查询）。指定列时返回完整画像：数值列为 {count, missing, min, max, sum, mean, median, p25, p75}，count 是实际参与统计的样本数、missing 含空值与无法解析的脏值（口径已注明）；文本列为 {count, missing, distinct, topValues 前 5 高频值}。未指定列时返回 {total, returned, items:[{name, type, count, missing, distinct?}]}。",
+        inputSchemaJson = "{\"type\":\"object\",\"properties\":{\"datasetId\":{\"type\":\"string\",\"description\":\"作用: 数据集编号。缺省处理: 必填，无默认值。例值: ds_1a2b3c4d5e6f\"},\"column\":{\"type\":\"string\",\"description\":\"作用: 要画像的列名（须与表头一致）。缺省处理: 未传时返回全部列概要。例值: 销售额\"}},\"required\":[\"datasetId\"]}",
+        timeoutSeconds = 15,
+        execType = "LOCAL",
+    ),
+    AbilityContract(
+        method = "stragent_get_group_aggregate",
+        description = "按一个文本维度列对一个数值指标列做分组聚合（求和或平均），返回各组的值、样本量与占比。需要回答「哪个门店 / 哪个月 / 哪个品类加起来最多」这类分组问题时用。参数 datasetId 必填；参数 dimension 表示分组维度列名（须为文本列），必填；参数 metric 表示聚合指标列名（须为数值列），必填；参数 mode 表示聚合方式 sum 或 avg，缺省为 sum；参数 limit 表示返回组数上限，缺省 8、上限 50，超出的组折成「其他 N 项」一条。返回 {total, returned, denominator, items:[{label, value, count, share}]}：total 为真实组数（不计折叠），count 为该组参与统计的行数，share 的分母在 denominator 字段写明——sum 且全体非负时分母为该指标全体合计，avg 模式或存在负值时 share 为 null（占合计无意义，不给错的数）。",
+        inputSchemaJson = "{\"type\":\"object\",\"properties\":{\"datasetId\":{\"type\":\"string\",\"description\":\"作用: 数据集编号。缺省处理: 必填，无默认值。例值: ds_1a2b3c4d5e6f\"},\"dimension\":{\"type\":\"string\",\"description\":\"作用: 分组维度列名（文本列）。缺省处理: 必填，无默认值。例值: 门店\"},\"metric\":{\"type\":\"string\",\"description\":\"作用: 聚合指标列名（数值列）。缺省处理: 必填，无默认值。例值: 销售额\"},\"mode\":{\"type\":\"string\",\"enum\":[\"sum\",\"avg\"],\"description\":\"作用: 聚合方式。缺省处理: 未传按 sum。\"},\"limit\":{\"type\":\"number\",\"description\":\"作用: 返回组数上限，超出折叠为「其他 N 项」。缺省处理: 未传按 8，上限 50。例值: 10\"}},\"required\":[\"datasetId\",\"dimension\",\"metric\"]}",
+        timeoutSeconds = 15,
+        execType = "LOCAL",
+    ),
+    AbilityContract(
+        method = "stragent_list_rows",
+        description = "分页返回数据集的原始数据行，用于核对统计结论或引用具体记录。需要「某个结论对应哪条原始数据」时用：极值、分组差异等分析结果都可以用本能力回查到行。参数 datasetId 必填；参数 offset 表示起始偏移，缺省为 0；参数 limit 表示单页行数，缺省 10、上限 50（大结果必须分页，不允许一次全量枚举）。返回 {total, returned, offset, items:[{row, cells}]}：row 为数据行号（从 1 起，不含表头行），cells 为该行各列的原始文本值（列顺序与导入时 columnList 一致）。**大文件抽样数据集**（stragent_import_file 导入）额外返回：items[].sourceRow 为源文件数据行号（回链依据）、sampling 块（步长 / 源文件行数 / 文件指纹）与 rowNumberNote 口径说明——报告里的「第 N 行」须按 sourceRow 回到源文件核对。",
+        inputSchemaJson = "{\"type\":\"object\",\"properties\":{\"datasetId\":{\"type\":\"string\",\"description\":\"作用: 数据集编号。缺省处理: 必填，无默认值。例值: ds_1a2b3c4d5e6f\"},\"offset\":{\"type\":\"number\",\"description\":\"作用: 起始偏移。缺省处理: 未传按 0。例值: 50\"},\"limit\":{\"type\":\"number\",\"description\":\"作用: 单页行数。缺省处理: 未传按 10，上限 50。例值: 20\"}},\"required\":[\"datasetId\"]}",
+        timeoutSeconds = 15,
+        execType = "LOCAL",
+    ),
+)

@@ -1,0 +1,46 @@
+# D15 T9：单服务编排（HTTP 传输，远程部署形态）
+#
+# T-146 起（BREAKING）：远程绑定必须显式声明身份源——
+#   启动：STRAGENT_OAUTH_ISSUER=https://idp.example.com docker compose up -d --build
+#        （未设置时 compose 在编排层直接报错退出，不会启动半配置的服务）
+#   取 token：从该 issuer（IdP）签发的 JWT——启用 OAuth 后静态 Bearer token 失效，
+#        `/mcp` 与 `/events` 只认 RS256 JWT（授权发现 / 可选变量见 D6「环境变量」）。
+# 调用：curl -H "Authorization: Bearer <JWT>" -H "Content-Type: application/json" \
+#        -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' http://127.0.0.1:7787/mcp
+#
+# 本机自用不必走容器：宿主机直跑（默认绑 127.0.0.1 + 静态 Bearer token），
+# 见 README「5 分钟接 MCP 客户端」路线 A；本地演示用 stdio 或宿主机 HTTP 均可。
+services:
+  str-agent-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: str-agent-mcp
+    ports:
+      - "7787:7787"
+    environment:
+      # 数据集与偏好持久化目录（与 Dockerfile 的 ENV 一致，显式写出便于阅读）
+      STRAGENT_HOME: /data
+      # 容器内必须绑 0.0.0.0，否则端口映射到的是容器回环，宿主机连不上；
+      # T-146 起远程绑定必须显式声明身份源（见下方 STRAGENT_OAUTH_ISSUER）。
+      STRAGENT_HTTP_BIND: 0.0.0.0
+      # T-146 fail-closed：远程绑定（0.0.0.0）未配 issuer 时宿主启动即抛异常
+      # （OWASP CWE-636），故 compose 在编排层也 fail-fast：未设置就 `up`
+      # 会在启动前直接报错退出，而不是跑起来一个静态 token 的远程服务。
+      STRAGENT_OAUTH_ISSUER: ${STRAGENT_OAUTH_ISSUER:?T-146：远程绑定必须配 OAuth issuer——无过期/无 audience/无 scope 的静态 token 不能用于远程暴露；本地自用请改走宿主机直跑（默认绑 127.0.0.1 + 静态 Bearer token）}
+      # 可选：用环境变量注入模型 API Key（不进镜像、不落盘）
+      STRAGENT_API_KEY: ${STRAGENT_API_KEY:-}
+    volumes:
+      - str-agent-data:/data
+    restart: unless-stopped
+    healthcheck:
+      # JRE 镜像里没有 curl；用 bash 的 /dev/tcp 探端口即可
+      # T-156：真实 HTTP 探活（/health 无需鉴权）——替代纯 TCP 端口探测（死锁/饱和时 TCP 仍通）
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/7787 && printf 'GET /health HTTP/1.0\r\nHost: localhost\r\n\r\n' >&3 && grep -q '200 OK' <&3"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  str-agent-data:

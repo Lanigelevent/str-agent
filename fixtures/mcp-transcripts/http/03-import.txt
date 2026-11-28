@@ -1,0 +1,14 @@
+> POST /mcp
+> content-type: application/json
+> authorization: Bearer __MCP_TOKEN__
+> mcp-session-id: sess-snapshot-baseline
+> request-body <<<<
+{"jsonrpc":"2.0","id":3,"params":{"name":"stragent_import_table","arguments":{"csv":"门店,销售额\n华东,1200.5\n华南,800\n华东,300","name":"门店销售"}},"method":"tools/call"}
+< status: 200
+< content-type: application/json; charset=utf-8
+< mcp-protocol-version: 2026-07-28
+< warning: 299 - "Mcp-Session-Id is deprecated since 2026-07-28; removed after 2027-07-28"
+< x-content-type-options: nosniff
+< x-frame-options: DENY
+< body <<<<
+{"jsonrpc":"2.0","id":3,"result":{"resultType":"complete","content":[{"type":"text","text":"{\"datasetId\":\"ds_0d3292889a39\",\"name\":\"门店销售\",\"rows\":3,\"columns\":2,\"columnList\":[{\"name\":\"门店\",\"type\":\"text\"},{\"name\":\"销售额\",\"type\":\"number\"}],\"columnListTruncated\":false,\"truncated\":false,\"validRows\":3,\"density\":1,\"injectionScan\":{\"scannedRows\":3,\"hitCount\":0,\"signals\":[]}}"}],"structuredContent":{"datasetId":"ds_0d3292889a39","name":"门店销售","rows":3,"columns":2,"columnList":[{"name":"门店","type":"text"},{"name":"销售额","type":"number"}],"columnListTruncated":false,"truncated":false,"validRows":3,"density":1,"injectionScan":{"scannedRows":3,"hitCount":0,"signals":[]}}}}

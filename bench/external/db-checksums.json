@@ -1,0 +1,82 @@
+{
+  "AdventureWorks": {
+    "sha256": "f8bb86bfde5fca5636030fa9490ad37d4397b0b21591ee62c7aca363a64f2653",
+    "bytes": 20205568
+  },
+  "Airlines": {
+    "sha256": "83dd643367785c6b38b5379eecaf2c37128babac96805a48362783ff0cafc0a1",
+    "bytes": 109531136
+  },
+  "Baseball": {
+    "sha256": "4784826541ea40d76dd9c2da2812e189ec351ca79e2738916da5587b465341cd",
+    "bytes": 30813184
+  },
+  "BowlingLeague": {
+    "sha256": "f8ceb5692677a5a4e04d0a08dd495ae8dbebffbacdb2a66dec551613775bc12c",
+    "bytes": 258048
+  },
+  "Brazilian_E_Commerce": {
+    "sha256": "96d1becb02714d76ef1a728d8ca0de33e52acead1668abd5f7d8a73a45f6d0f3",
+    "bytes": 114589696
+  },
+  "Db-IMDB": {
+    "sha256": "34b043fffa7e10a152c8d1536bb54e5365df102ac9d8c09d4549ef0d9ef6aadf",
+    "bytes": 7507968
+  },
+  "EU_soccer": {
+    "sha256": "b4ebd079625bb9cd20437eaae1ccd0fc82f0f390567cfe3ee1df78fa08ad5f9a",
+    "bytes": 313090048
+  },
+  "EntertainmentAgency": {
+    "sha256": "24237bd0232f4b542b3e5c0417c9890c1d02ae8e2434253af58528e517a0fd07",
+    "bytes": 245760
+  },
+  "IPL": {
+    "sha256": "bf5ddbf887bbf992a091ef31ee681b9339ba716c327263fce0f3b4da924f22c1",
+    "bytes": 12636160
+  },
+  "Pagila": {
+    "sha256": "dbca3837b9965d75fbc2b4af1b2daec57d841f95942e656cea44db997e05da88",
+    "bytes": 5828608
+  },
+  "WWE": {
+    "sha256": "5e21654b3ea344583c921864c499ea984e66fb46579f7d4e74f531d0f415a52a",
+    "bytes": 176025600
+  },
+  "chinook": {
+    "sha256": "d6c11e2ccda2a36883af57f031f76fbd55e247f3be1710c4c8aaa72ec06a18cb",
+    "bytes": 884736
+  },
+  "delivery_center": {
+    "sha256": "d882e3e6552634e27739beab4c65fe8ec2086b84155489762f9052a663913f9e",
+    "bytes": 128471040
+  },
+  "f1": {
+    "sha256": "35ad3b824678e8435bde02f14bcd554630792874749fdd59fe9ca1385234ce23",
+    "bytes": 74940416
+  },
+  "imdb_movies": {
+    "sha256": "175c1da2deb00fe28d70608f7839aea5abc214dca15bb3e8622c9b7258c25b9e",
+    "bytes": 3170304
+  },
+  "log": {
+    "sha256": "800191cd5ba91dcaebb427bb9313dc5bef1571b848b597508f15372e77c2dbd8",
+    "bytes": 122880
+  },
+  "northwind": {
+    "sha256": "80a1d9591da7aeaaa439ba0002023d5ab69d3f15a3d8b2ac9389dfd30543c1e7",
+    "bytes": 245760
+  },
+  "oracle_sql": {
+    "sha256": "ace68ede8f7fddc523d522e938ccfeee1f54c11888fd2c956ebc27892fc595fe",
+    "bytes": 339968
+  },
+  "school_scheduling": {
+    "sha256": "bf37030ee170906bfa6bf5958766cf2a63dc0ad8168b3892ad96940be838fe63",
+    "bytes": 204800
+  },
+  "stacking": {
+    "sha256": "eb683890921eb597f176692fe6ac9fb544dde3fd78084d019bf82cd0e6efe780",
+    "bytes": 532480
+  }
+}

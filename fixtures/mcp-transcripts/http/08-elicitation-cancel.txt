@@ -1,0 +1,14 @@
+> POST /mcp
+> content-type: application/json
+> authorization: Bearer __MCP_TOKEN__
+> mcp-session-id: sess-snapshot-elicit
+> request-body <<<<
+{"jsonrpc":"2.0","id":31,"params":{"name":"stragent_elicit_probe","arguments":{}},"method":"tools/call"}
+< status: 200
+< content-type: application/json; charset=utf-8
+< mcp-protocol-version: 2026-07-28
+< warning: 299 - "Mcp-Session-Id is deprecated since 2026-07-28; removed after 2027-07-28"
+< x-content-type-options: nosniff
+< x-frame-options: DENY
+< body <<<<
+{"jsonrpc":"2.0","id":31,"result":{"resultType":"complete","content":[{"type":"text","text":"{\"text\":\"{\\\"action\\\":\\\"cancel\\\",\\\"reason\\\":\\\"客户端未建立服务端消息通道，不支持 elicitation（stdio 传输自动支持；HTTP 需要先 GET /mcp 的 SSE 流）\\\"}\"}"}],"structuredContent":{"text":"{\"action\":\"cancel\",\"reason\":\"客户端未建立服务端消息通道，不支持 elicitation（stdio 传输自动支持；HTTP 需要先 GET /mcp 的 SSE 流）\"}"}}}

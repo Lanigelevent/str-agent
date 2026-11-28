@@ -1,0 +1,14 @@
+> POST /mcp
+> content-type: application/json
+> authorization: Bearer __MCP_TOKEN__
+> mcp-session-id: sess-snapshot-baseline
+> request-body <<<<
+{"jsonrpc":"2.0","id":5,"params":{"name":"stragent_get_group_aggregate","arguments":{"datasetId":"ds_0d3292889a39","dimension":"门店","metric":"销售额"}},"method":"tools/call"}
+< status: 200
+< content-type: application/json; charset=utf-8
+< mcp-protocol-version: 2026-07-28
+< warning: 299 - "Mcp-Session-Id is deprecated since 2026-07-28; removed after 2027-07-28"
+< x-content-type-options: nosniff
+< x-frame-options: DENY
+< body <<<<
+{"jsonrpc":"2.0","id":5,"result":{"resultType":"complete","content":[{"type":"text","text":"{\"dataset\":\"ds_0d3292889a39\",\"dimension\":\"门店\",\"metric\":\"销售额\",\"mode\":\"sum\",\"denominator\":\"share 分母 = 该指标全体合计（存在负值时置 null）\",\"total\":2,\"returned\":2,\"items\":[{\"label\":\"华东\",\"value\":1500.5,\"count\":2,\"share\":0.6522495109758748},{\"label\":\"华南\",\"value\":800,\"count\":1,\"share\":0.3477504890241252}]}"}],"structuredContent":{"dataset":"ds_0d3292889a39","dimension":"门店","metric":"销售额","mode":"sum","denominator":"share 分母 = 该指标全体合计（存在负值时置 null）","total":2,"returned":2,"items":[{"label":"华东","value":1500.5,"count":2,"share":0.6522495109758748},{"label":"华南","value":800,"count":1,"share":0.3477504890241252}]}}}

@@ -1,0 +1,36 @@
+# 热路径正则未预编译——按文件配额豁免表（T-140）
+#
+# 规则：函数体内的 `Regex(...)` 每次调用都重新编译 Pattern。仓内正确先例：
+#       core/verify/VerifyCore.kt:17-38（全部 `private val` 预编译）。
+# 命中即 ERROR——不在本表里的文件一旦出现函数体内的内联 Regex 就红。
+#
+# 本表是**存量清单**：每行 `<仓库相对路径> <允许条数>`。
+# 文件内的实际条数超过配额 → 超出部分逐条报 ERROR（存量文件里不许新增）。
+# 清理一批（把内联 Regex 提为 `private val`）→ 调低配额 → 该类违规被彻底堵死。
+#
+# 只统计**生产代码**（src/main）：测试里的内联正则不构成热路径。
+#
+# 格式：路径用正斜杠（与平台无关）；空行与 # 开头的行忽略。
+core/src/main/kotlin/com/stragent/core/ai/ChunkContext.kt 2
+core/src/main/kotlin/com/stragent/core/ai/Followup.kt 2
+core/src/main/kotlin/com/stragent/core/ai/InsightOrchestrator.kt 2
+core/src/main/kotlin/com/stragent/core/ai/TextReview.kt 1
+core/src/main/kotlin/com/stragent/core/brief/DatasetBrief.kt 1
+core/src/main/kotlin/com/stragent/core/brief/BriefBudget.kt 2
+core/src/main/kotlin/com/stragent/core/csv/TableText.kt 8
+core/src/main/kotlin/com/stragent/core/report/ReportChapters.kt 3
+core/src/main/kotlin/com/stragent/core/report/ReportLib.kt 3
+core/src/main/kotlin/com/stragent/core/report/TargetLength.kt 1
+core/src/main/kotlin/com/stragent/core/semantic/MetricEngine.kt 1
+core/src/main/kotlin/com/stragent/core/trace/ProvenanceManifest.kt 1
+core/src/main/kotlin/com/stragent/core/verify/LabelsAndRelations.kt 16
+core/src/main/kotlin/com/stragent/core/verify/VerifyCore.kt 1
+data/src/main/kotlin/com/stragent/data/HttpLlmClient.kt 1
+data/src/main/kotlin/com/stragent/data/VisionPrompts.kt 1
+data/src/main/kotlin/com/stragent/data/XlsxParser.kt 1
+host/src/main/kotlin/com/stragent/host/ImportFileTool.kt 2
+host/src/main/kotlin/com/stragent/host/ImportTextTool.kt 1
+host/src/main/kotlin/com/stragent/host/XlsxExporter.kt 1
+str-agent/src/main/kotlin/com/stragent/agent/AgentLoop.kt 1
+str-agent/src/main/kotlin/com/stragent/agent/AgentTools.kt 4
+str-agent/src/main/kotlin/com/stragent/agent/StepSearchClient.kt 3

@@ -1,0 +1,47 @@
+[
+  {
+    "name": "perf-baseline-tier1-parse",
+    "baselineMs": 239,
+    "baselineMemoryMb": 0
+  },
+  {
+    "name": "perf-baseline-tier1-resident",
+    "baselineMs": 0,
+    "baselineMemoryMb": 25
+  },
+  {
+    "name": "perf-baseline-tier1-peak",
+    "baselineMs": 0,
+    "baselineMemoryMb": 109
+  },
+  {
+    "name": "brief-latency-1000x20",
+    "baselineMs": 70,
+    "baselineMemoryMb": 0
+  },
+  {
+    "name": "brief-latency-10000x20",
+    "baselineMs": 748,
+    "baselineMemoryMb": 0,
+    "samplesMs": [
+      434,
+      513,
+      554,
+      571,
+      617,
+      633,
+      637,
+      716,
+      717,
+      747,
+      748,
+      820,
+      911
+    ]
+  },
+  {
+    "name": "brief-latency-10000x20-peak",
+    "baselineMs": 0,
+    "baselineMemoryMb": 305
+  }
+]

@@ -1,0 +1,48 @@
+# D15 T9: .dockerignore
+# 构建产物
+build/
+.gradle/
+out/
+*.jar
+# Gradle Wrapper 的 jar 是构建必需（否则容器里 ./gradlew 起不来）
+!gradle/wrapper/gradle-wrapper.jar
+
+# 外部基准数据集（约 950MB，运行时/镜像都不需要；T-057）
+bench/external/data/
+
+# 版本控制
+.git/
+.gitignore
+
+# 开发文件
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# 本地配置（敏感）
+local.properties
+.env
+.env.*
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# 测试与 fixtures（运行时不需要）
+fixtures/
+**/src/test/
+**/src/it/
+
+# 文档（可选：保留则删掉下面两行）
+# docs/
+# *.md
+
+# 脚本（构建时不需要）
+scripts/
+*.py
+*.ps1
+*.bat
+# Python 沙箱 runner 是运行时资源，必须保留
+!**/src/main/resources/**/*.py

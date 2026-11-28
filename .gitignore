@@ -1,0 +1,34 @@
+# Built/source artifacts
+*.iml
+.gradle/
+.kotlin/
+build/
+*/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# 本机遗留配置（Android SDK 路径）。仓库已无 Android 模块（AD-020），该文件已无用，
+# 但它含本机绝对路径，禁止入库；新设备可直接删除。
+local.properties
+
+# 插件运行时的数据目录（宿主按 plugin.json 的 STRAGENT_HOME 指向仓库内时产生）
+.str-agent-home/
+
+# 本机工具状态与临时日志（工作流会话记录、测试输出）
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+
+# T-057 外部基准数据集（约 950MB，按 bench/external/README.md 现取）
+bench/external/data/
+
+# Python 缓存（py_compile / 本地运行产物，不入库）
+__pycache__/
+*.pyc
+.zcode/

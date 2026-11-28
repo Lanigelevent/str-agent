@@ -1,0 +1,46 @@
+{
+  "metric": "LINE",
+  "tool": "org.jacoco 0.8.12（Gradle 插件，-Pcoverage）",
+  "modules": [
+    "core",
+    "str-agent",
+    "data",
+    "engine-duckdb",
+    "host"
+  ],
+  "excluded": [
+    "bench（评测基座，覆盖率不代表产品质量）"
+  ],
+  "lineCovered": 16683,
+  "lineTotal": 18987,
+  "linePercent": 87.87,
+  "tolerancePp": 0.1,
+  "perModule": {
+    "core": {
+      "covered": 8829,
+      "missed": 825,
+      "percent": 91.45
+    },
+    "str-agent": {
+      "covered": 1777,
+      "missed": 805,
+      "percent": 68.82
+    },
+    "data": {
+      "covered": 2985,
+      "missed": 355,
+      "percent": 89.37
+    },
+    "engine-duckdb": {
+      "covered": 187,
+      "missed": 66,
+      "percent": 73.91
+    },
+    "host": {
+      "covered": 2905,
+      "missed": 253,
+      "percent": 91.99
+    }
+  },
+  "measuredAt": "2026-10-29"
+}

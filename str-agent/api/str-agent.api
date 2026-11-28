@@ -1,0 +1,611 @@
+public final class com/stragent/agent/AgentCheckpoint {
+	public static final field Companion Lcom/stragent/agent/AgentCheckpoint$Companion;
+	public final fun clear ()V
+	public final fun getEnabled ()Z
+	public final fun getStage ()Ljava/lang/String;
+	public final fun load ()Lkotlinx/serialization/json/JsonObject;
+	public final fun save (Lkotlinx/serialization/json/JsonObject;)Z
+}
+
+public final class com/stragent/agent/AgentCheckpoint$Companion {
+	public final fun getNONE ()Lcom/stragent/agent/AgentCheckpoint;
+}
+
+public final class com/stragent/agent/AgentCheckpointStore {
+	public static final field Companion Lcom/stragent/agent/AgentCheckpointStore$Companion;
+	public static final field DEFAULT_SWEEP_AGE_MS J
+	public static final field VERSION I
+	public fun <init> (Ljava/io/File;)V
+	public final fun clearRun (Ljava/lang/String;)V
+	public final fun forRun (Ljava/lang/String;)Lcom/stragent/agent/AgentRunCheckpoints;
+	public final fun getEnabled ()Z
+	public final fun getRoot ()Ljava/io/File;
+	public final fun sweepOrphans (JJ)I
+	public static synthetic fun sweepOrphans$default (Lcom/stragent/agent/AgentCheckpointStore;JJILjava/lang/Object;)I
+}
+
+public final class com/stragent/agent/AgentCheckpointStore$Companion {
+	public final fun runKey (Lcom/stragent/core/dataset/Dataset;Lcom/stragent/agent/PluginManifest;Ljava/lang/String;I)Ljava/lang/String;
+	public final fun sha256 (Ljava/lang/String;)Ljava/lang/String;
+	public final fun sha256 ([B)Ljava/lang/String;
+}
+
+public final class com/stragent/agent/AgentEngine {
+	public static final field CLASSIC Ljava/lang/String;
+	public static final field INSTANCE Lcom/stragent/agent/AgentEngine;
+	public final fun getEngineId (Lcom/stragent/core/ports/PrefsStore;)Ljava/lang/String;
+	public final fun selectedFollowupPlugin (Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/agent/PluginRegistry;)Lcom/stragent/agent/PluginManifest;
+	public final fun selectedReportPlugin (Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/agent/PluginRegistry;Lcom/stragent/agent/ReportEngineRegistry;)Lcom/stragent/agent/PluginManifest;
+	public static synthetic fun selectedReportPlugin$default (Lcom/stragent/agent/AgentEngine;Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/agent/PluginRegistry;Lcom/stragent/agent/ReportEngineRegistry;ILjava/lang/Object;)Lcom/stragent/agent/PluginManifest;
+	public final fun selectedReviewPlugin (Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/agent/PluginRegistry;)Lcom/stragent/agent/PluginManifest;
+	public final fun setEngineId (Lcom/stragent/core/ports/PrefsStore;Ljava/lang/String;)V
+}
+
+public final class com/stragent/agent/AgentIntegratedOrchestrator {
+	public fun <init> (Lcom/stragent/core/ai/InsightOrchestrator;Lcom/stragent/core/ports/LlmClient;Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/agent/PluginRegistry;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/agent/AgentCheckpointStore;Lcom/stragent/agent/ReportEngineRegistry;Lcom/stragent/core/report/ReportTypeRegistry;)V
+	public synthetic fun <init> (Lcom/stragent/core/ai/InsightOrchestrator;Lcom/stragent/core/ports/LlmClient;Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/agent/PluginRegistry;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/agent/AgentCheckpointStore;Lcom/stragent/agent/ReportEngineRegistry;Lcom/stragent/core/report/ReportTypeRegistry;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun askFollowup (Lcom/stragent/core/dataset/Dataset;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;Lcom/stragent/core/ports/EmbeddingClient;Lcom/stragent/core/ports/RerankClient;Ljava/lang/String;Lcom/stragent/core/ports/QueryDecomposer;Lcom/stragent/core/ports/ChunkContextClient;Lcom/stragent/core/ports/BlockSummarizer;)Lcom/stragent/core/ai/ChatResult;
+	public static synthetic fun askFollowup$default (Lcom/stragent/agent/AgentIntegratedOrchestrator;Lcom/stragent/core/dataset/Dataset;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;Lcom/stragent/core/ports/EmbeddingClient;Lcom/stragent/core/ports/RerankClient;Ljava/lang/String;Lcom/stragent/core/ports/QueryDecomposer;Lcom/stragent/core/ports/ChunkContextClient;Lcom/stragent/core/ports/BlockSummarizer;ILjava/lang/Object;)Lcom/stragent/core/ai/ChatResult;
+	public final fun generateInsight (Lcom/stragent/core/dataset/Dataset;ZLjava/util/List;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lcom/stragent/core/observability/OtelSpanContext;Ljava/lang/Double;Ljava/util/Map;)Lcom/stragent/core/ai/InsightResult;
+	public static synthetic fun generateInsight$default (Lcom/stragent/agent/AgentIntegratedOrchestrator;Lcom/stragent/core/dataset/Dataset;ZLjava/util/List;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lcom/stragent/core/observability/OtelSpanContext;Ljava/lang/Double;Ljava/util/Map;ILjava/lang/Object;)Lcom/stragent/core/ai/InsightResult;
+}
+
+public final class com/stragent/agent/AgentLoop {
+	public fun <init> (Lcom/stragent/core/ports/LlmClient;)V
+	public final fun run (Lcom/stragent/agent/PluginManifest;Lcom/stragent/core/ports/ToolRegistry;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lcom/stragent/agent/AgentCheckpoint;Z)Lcom/stragent/agent/AgentOutcome;
+	public static synthetic fun run$default (Lcom/stragent/agent/AgentLoop;Lcom/stragent/agent/PluginManifest;Lcom/stragent/core/ports/ToolRegistry;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lcom/stragent/agent/AgentCheckpoint;ZILjava/lang/Object;)Lcom/stragent/agent/AgentOutcome;
+}
+
+public final class com/stragent/agent/AgentOutcome {
+	public fun <init> (Lkotlinx/serialization/json/JsonObject;Ljava/util/List;IILjava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;I)V
+	public synthetic fun <init> (Lkotlinx/serialization/json/JsonObject;Ljava/util/List;IILjava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun component10 ()I
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Ljava/util/List;
+	public final fun component7 ()Ljava/util/List;
+	public final fun component8 ()Ljava/util/List;
+	public final fun component9 ()Ljava/util/List;
+	public final fun copy (Lkotlinx/serialization/json/JsonObject;Ljava/util/List;IILjava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;I)Lcom/stragent/agent/AgentOutcome;
+	public static synthetic fun copy$default (Lcom/stragent/agent/AgentOutcome;Lkotlinx/serialization/json/JsonObject;Ljava/util/List;IILjava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;IILjava/lang/Object;)Lcom/stragent/agent/AgentOutcome;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCharts ()Ljava/util/List;
+	public final fun getFindings ()Ljava/util/List;
+	public final fun getGateRevisions ()I
+	public final fun getOutput ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getPlan ()Ljava/util/List;
+	public final fun getQualityNotes ()Ljava/util/List;
+	public final fun getSteps ()Ljava/util/List;
+	public final fun getToolCalls ()I
+	public final fun getTotalTokens ()I
+	public final fun getTrace ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/AgentReportDelegate {
+	public fun <init> (Lcom/stragent/core/ports/LlmClient;Lcom/stragent/core/ports/PrefsStore;)V
+	public final fun tryGenerateReport (Lcom/stragent/core/dataset/Dataset;Lcom/stragent/agent/PluginManifest;Lcom/stragent/core/report/TargetLength;Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function0;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/agent/AgentCheckpoint;)Lcom/stragent/core/ai/InsightResult;
+	public static synthetic fun tryGenerateReport$default (Lcom/stragent/agent/AgentReportDelegate;Lcom/stragent/core/dataset/Dataset;Lcom/stragent/agent/PluginManifest;Lcom/stragent/core/report/TargetLength;Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function0;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/agent/AgentCheckpoint;ILjava/lang/Object;)Lcom/stragent/core/ai/InsightResult;
+}
+
+public final class com/stragent/agent/AgentRunCheckpoints {
+	public final fun clearAll ()V
+	public final fun getRunKey ()Ljava/lang/String;
+	public final fun getStore ()Lcom/stragent/agent/AgentCheckpointStore;
+	public final fun stage (Ljava/lang/String;)Lcom/stragent/agent/AgentCheckpoint;
+}
+
+public final class com/stragent/agent/AgentStep {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)Lcom/stragent/agent/AgentStep;
+	public static synthetic fun copy$default (Lcom/stragent/agent/AgentStep;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lcom/stragent/agent/AgentStep;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getArgsSummary ()Ljava/lang/String;
+	public final fun getOk ()Z
+	public final fun getResultSummary ()Ljava/lang/String;
+	public final fun getTool ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/AgentToolsKt {
+	public static final fun buildAgentTools (Lcom/stragent/core/dataset/Dataset;Ljava/lang/String;Lcom/stragent/core/ports/SearchClient;)Ljava/util/List;
+	public static final fun webFetchTool ()Lcom/stragent/core/ports/AgentTool;
+	public static final fun webSearchTool (Lcom/stragent/core/ports/SearchClient;)Lcom/stragent/core/ports/AgentTool;
+}
+
+public final class com/stragent/agent/AgentTraceEntry {
+	public fun <init> (ILjava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Z
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (ILjava/lang/String;Ljava/lang/String;ZLjava/lang/String;)Lcom/stragent/agent/AgentTraceEntry;
+	public static synthetic fun copy$default (Lcom/stragent/agent/AgentTraceEntry;ILjava/lang/String;Ljava/lang/String;ZLjava/lang/String;ILjava/lang/Object;)Lcom/stragent/agent/AgentTraceEntry;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()Ljava/lang/String;
+	public final fun getOk ()Z
+	public final fun getStep ()I
+	public final fun getThought ()Ljava/lang/String;
+	public final fun getTool ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun toJson ()Lkotlinx/serialization/json/JsonObject;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/EditorialBeat {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lcom/stragent/agent/EditorialBeat;
+	public static synthetic fun copy$default (Lcom/stragent/agent/EditorialBeat;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/stragent/agent/EditorialBeat;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getPrompt ()Ljava/lang/String;
+	public final fun getTools ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/EditorialDept {
+	public static final field CHAPTERED_MIN_CHARS I
+	public static final field CHAPTER_STEPS I
+	public static final field Companion Lcom/stragent/agent/EditorialDept$Companion;
+	public static final field MAX_REVISIONS I
+	public fun <init> (Lcom/stragent/core/ports/LlmClient;Lcom/stragent/core/report/ReportTypeRegistry;)V
+	public synthetic fun <init> (Lcom/stragent/core/ports/LlmClient;Lcom/stragent/core/report/ReportTypeRegistry;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun run (Lcom/stragent/core/dataset/Dataset;Ljava/lang/String;Lcom/stragent/core/report/TargetLength;Ljava/lang/String;Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/agent/PluginManifest;Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Ljava/util/List;Ljava/util/List;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/agent/AgentRunCheckpoints;)Lcom/stragent/agent/AgentOutcome;
+	public static synthetic fun run$default (Lcom/stragent/agent/EditorialDept;Lcom/stragent/core/dataset/Dataset;Ljava/lang/String;Lcom/stragent/core/report/TargetLength;Ljava/lang/String;Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/agent/PluginManifest;Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Ljava/util/List;Ljava/util/List;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/agent/AgentRunCheckpoints;ILjava/lang/Object;)Lcom/stragent/agent/AgentOutcome;
+}
+
+public final class com/stragent/agent/EditorialDept$Companion {
+}
+
+public final class com/stragent/agent/FinishShape : java/lang/Enum {
+	public static final field ANSWER Lcom/stragent/agent/FinishShape;
+	public static final field ISSUES Lcom/stragent/agent/FinishShape;
+	public static final field REPORT Lcom/stragent/agent/FinishShape;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/stragent/agent/FinishShape;
+	public static fun values ()[Lcom/stragent/agent/FinishShape;
+}
+
+public final class com/stragent/agent/HarnessContractKt {
+	public static final field AGENT_HARNESS_CONTRACT Ljava/lang/String;
+	public static final field AGENT_HARNESS_CONTRACT_NATIVE Ljava/lang/String;
+}
+
+public final class com/stragent/agent/IntentAssessment {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lcom/stragent/agent/IntentAssessment;
+	public static synthetic fun copy$default (Lcom/stragent/agent/IntentAssessment;Ljava/util/List;ILjava/lang/Object;)Lcom/stragent/agent/IntentAssessment;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun gateBlock ()Ljava/lang/String;
+	public final fun getSignals ()Ljava/util/List;
+	public fun hashCode ()I
+	public final fun isVague ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/IntentClarifier {
+	public static final field INSTANCE Lcom/stragent/agent/IntentClarifier;
+	public final fun analyze (Ljava/lang/String;)Lcom/stragent/agent/IntentAssessment;
+}
+
+public final class com/stragent/agent/IntentSignal {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/stragent/agent/IntentSignal;
+	public static synthetic fun copy$default (Lcom/stragent/agent/IntentSignal;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/stragent/agent/IntentSignal;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEvidence ()Ljava/lang/String;
+	public final fun getKind ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/PluginKindSpec {
+	public fun <init> (Ljava/lang/String;Lcom/stragent/agent/FinishShape;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lcom/stragent/agent/FinishShape;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Lcom/stragent/agent/FinishShape;Ljava/lang/String;)Lcom/stragent/agent/PluginKindSpec;
+	public static synthetic fun copy$default (Lcom/stragent/agent/PluginKindSpec;Ljava/lang/String;Lcom/stragent/agent/FinishShape;Ljava/lang/String;ILjava/lang/Object;)Lcom/stragent/agent/PluginKindSpec;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFinishArgsHint ()Ljava/lang/String;
+	public final fun getFinishShape ()Lcom/stragent/agent/FinishShape;
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/PluginKinds {
+	public static final field INSTANCE Lcom/stragent/agent/PluginKinds;
+	public final fun all ()Ljava/util/List;
+	public final fun ids ()Ljava/util/Set;
+	public final fun of (Ljava/lang/String;)Lcom/stragent/agent/PluginKindSpec;
+	public final fun register (Lcom/stragent/agent/PluginKindSpec;)V
+}
+
+public final class com/stragent/agent/PluginManifest {
+	public static final field Companion Lcom/stragent/agent/PluginManifest$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;DILjava/lang/String;Ljava/util/List;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;DILjava/lang/String;Ljava/util/List;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Ljava/util/List;
+	public final fun component11 ()Z
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()D
+	public final fun component8 ()I
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;DILjava/lang/String;Ljava/util/List;Z)Lcom/stragent/agent/PluginManifest;
+	public static synthetic fun copy$default (Lcom/stragent/agent/PluginManifest;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;DILjava/lang/String;Ljava/util/List;ZILjava/lang/Object;)Lcom/stragent/agent/PluginManifest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBeats ()Ljava/util/List;
+	public final fun getChaptered ()Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getKind ()Ljava/lang/String;
+	public final fun getMaxSteps ()I
+	public final fun getModel ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSystemPrompt ()Ljava/lang/String;
+	public final fun getTemperature ()D
+	public final fun getTools ()Ljava/util/List;
+	public final fun getWriterPrompt ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun toJson ()Lkotlinx/serialization/json/JsonObject;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/PluginManifest$Companion {
+	public final fun getKINDS ()Ljava/util/List;
+	public final fun parse (Ljava/lang/String;)Lcom/stragent/agent/PluginManifest;
+}
+
+public final class com/stragent/agent/PluginRegistry {
+	public static final field Companion Lcom/stragent/agent/PluginRegistry$Companion;
+	public fun <init> (Ljava/io/File;)V
+	public final fun delete (Ljava/lang/String;)Z
+	public final fun get (Ljava/lang/String;)Lcom/stragent/agent/PluginManifest;
+	public final fun getBuiltIns ()Ljava/util/List;
+	public final fun import (Ljava/lang/String;)Lcom/stragent/agent/PluginManifest;
+	public final fun list ()Ljava/util/List;
+	public final fun user ()Ljava/util/List;
+}
+
+public final class com/stragent/agent/PluginRegistry$Companion {
+	public final fun userDir (Ljava/io/File;)Ljava/io/File;
+}
+
+public final class com/stragent/agent/PortsShimsKt {
+	public static final fun schemaAnyField (Ljava/lang/String;)Lkotlinx/serialization/json/JsonObject;
+	public static synthetic fun schemaAnyField$default (Ljava/lang/String;ILjava/lang/Object;)Lkotlinx/serialization/json/JsonObject;
+	public static final fun schemaArrayField (Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;)Lkotlinx/serialization/json/JsonObject;
+	public static synthetic fun schemaArrayField$default (Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;ILjava/lang/Object;)Lkotlinx/serialization/json/JsonObject;
+	public static final fun schemaField (Ljava/lang/String;Ljava/lang/String;)Lkotlinx/serialization/json/JsonObject;
+	public static synthetic fun schemaField$default (Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lkotlinx/serialization/json/JsonObject;
+	public static final fun schemaObject ([Lkotlin/Pair;Ljava/util/List;)Lkotlinx/serialization/json/JsonObject;
+	public static synthetic fun schemaObject$default ([Lkotlin/Pair;Ljava/util/List;ILjava/lang/Object;)Lkotlinx/serialization/json/JsonObject;
+}
+
+public abstract interface class com/stragent/agent/ReportEngine {
+	public abstract fun generate (Lcom/stragent/agent/ReportEngineRequest;)Lcom/stragent/core/ai/InsightResult;
+	public abstract fun getGateRevisionBudget ()I
+	public abstract fun getKind ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/ReportEngineRegistry {
+	public static final field Companion Lcom/stragent/agent/ReportEngineRegistry$Companion;
+	public final fun create (Lcom/stragent/agent/PluginManifest;Lcom/stragent/agent/ReportEngineRegistry$Deps;)Lcom/stragent/agent/ReportEngine;
+	public final fun supports (Ljava/lang/String;)Z
+	public final fun with (Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lcom/stragent/agent/ReportEngineRegistry;
+}
+
+public final class com/stragent/agent/ReportEngineRegistry$Companion {
+	public final fun getBUILT_IN ()Lcom/stragent/agent/ReportEngineRegistry;
+}
+
+public final class com/stragent/agent/ReportEngineRegistry$Deps {
+	public fun <init> (Lcom/stragent/core/ports/LlmClient;Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/core/report/ReportTypeRegistry;)V
+	public synthetic fun <init> (Lcom/stragent/core/ports/LlmClient;Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/core/report/ReportTypeRegistry;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getLlm ()Lcom/stragent/core/ports/LlmClient;
+	public final fun getPrefs ()Lcom/stragent/core/ports/PrefsStore;
+	public final fun getTypes ()Lcom/stragent/core/report/ReportTypeRegistry;
+}
+
+public final class com/stragent/agent/ReportEngineRequest {
+	public fun <init> (Lcom/stragent/core/dataset/Dataset;Lcom/stragent/agent/PluginManifest;Ljava/lang/String;Lcom/stragent/core/report/TargetLength;Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function0;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/agent/AgentCheckpoint;Lcom/stragent/agent/AgentRunCheckpoints;)V
+	public synthetic fun <init> (Lcom/stragent/core/dataset/Dataset;Lcom/stragent/agent/PluginManifest;Ljava/lang/String;Lcom/stragent/core/report/TargetLength;Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function0;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/agent/AgentCheckpoint;Lcom/stragent/agent/AgentRunCheckpoints;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/stragent/core/dataset/Dataset;
+	public final fun component10 ()Ljava/util/List;
+	public final fun component11 ()Ljava/util/List;
+	public final fun component12 ()Lcom/stragent/core/ports/SearchClient;
+	public final fun component13 ()Lcom/stragent/agent/AgentCheckpoint;
+	public final fun component14 ()Lcom/stragent/agent/AgentRunCheckpoints;
+	public final fun component2 ()Lcom/stragent/agent/PluginManifest;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lcom/stragent/core/report/TargetLength;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/util/List;
+	public final fun component7 ()Lkotlin/jvm/functions/Function2;
+	public final fun component8 ()Lkotlin/jvm/functions/Function0;
+	public final fun component9 ()Ljava/util/List;
+	public final fun copy (Lcom/stragent/core/dataset/Dataset;Lcom/stragent/agent/PluginManifest;Ljava/lang/String;Lcom/stragent/core/report/TargetLength;Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function0;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/agent/AgentCheckpoint;Lcom/stragent/agent/AgentRunCheckpoints;)Lcom/stragent/agent/ReportEngineRequest;
+	public static synthetic fun copy$default (Lcom/stragent/agent/ReportEngineRequest;Lcom/stragent/core/dataset/Dataset;Lcom/stragent/agent/PluginManifest;Ljava/lang/String;Lcom/stragent/core/report/TargetLength;Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function0;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/agent/AgentCheckpoint;Lcom/stragent/agent/AgentRunCheckpoints;ILjava/lang/Object;)Lcom/stragent/agent/ReportEngineRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBrief ()Ljava/lang/String;
+	public final fun getCaliberNotes ()Ljava/util/List;
+	public final fun getCancelSignal ()Lkotlin/jvm/functions/Function0;
+	public final fun getCheckpoint ()Lcom/stragent/agent/AgentCheckpoint;
+	public final fun getCheckpoints ()Lcom/stragent/agent/AgentRunCheckpoints;
+	public final fun getDataset ()Lcom/stragent/core/dataset/Dataset;
+	public final fun getMemory ()Ljava/util/List;
+	public final fun getMetrics ()Ljava/util/List;
+	public final fun getOnStage ()Lkotlin/jvm/functions/Function2;
+	public final fun getPlugin ()Lcom/stragent/agent/PluginManifest;
+	public final fun getSearch ()Lcom/stragent/core/ports/SearchClient;
+	public final fun getSemantic ()Ljava/util/List;
+	public final fun getTarget ()Lcom/stragent/core/report/TargetLength;
+	public final fun getTypeId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/StepSearchClient : com/stragent/core/ports/SearchClient {
+	public static final field Companion Lcom/stragent/agent/StepSearchClient$Companion;
+	public fun <init> (Lcom/stragent/core/ports/PrefsStore;)V
+	public fun search (Ljava/lang/String;)Ljava/util/List;
+	public final fun searchRaw (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class com/stragent/agent/StepSearchClient$Companion {
+	public final fun extractItems (Ljava/lang/String;)Ljava/util/List;
+	public final fun parseRpcBody (Ljava/lang/String;)Lkotlinx/serialization/json/JsonObject;
+	public final fun readToolText (Lkotlinx/serialization/json/JsonObject;)Ljava/lang/String;
+}
+
+public final class com/stragent/agent/plugin/DshContractKt {
+	public static final fun getSTR_AGENT_CONTRIBUTE_SEAMS ()Ljava/util/List;
+	public static final fun getSTR_AGENT_INJECT_SEAMS ()Ljava/util/List;
+	public static final fun toJsonArray (Ljava/util/List;)Lkotlinx/serialization/json/JsonArray;
+}
+
+public final class com/stragent/agent/plugin/DshPluginType : java/lang/Enum {
+	public static final field FUN Lcom/stragent/agent/plugin/DshPluginType;
+	public static final field MEMORY Lcom/stragent/agent/plugin/DshPluginType;
+	public static final field MODELS Lcom/stragent/agent/plugin/DshPluginType;
+	public static final field NOTIFICATIONS Lcom/stragent/agent/plugin/DshPluginType;
+	public static final field SKILLS Lcom/stragent/agent/plugin/DshPluginType;
+	public static final field TOOLS Lcom/stragent/agent/plugin/DshPluginType;
+	public static final field UI Lcom/stragent/agent/plugin/DshPluginType;
+	public static final field WORKFLOWS Lcom/stragent/agent/plugin/DshPluginType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lcom/stragent/agent/plugin/DshPluginType;
+	public static fun values ()[Lcom/stragent/agent/plugin/DshPluginType;
+}
+
+public abstract interface class com/stragent/agent/plugin/HostPlugin {
+	public abstract fun activate ()V
+	public abstract fun capabilities ()Ljava/util/List;
+	public abstract fun deactivate ()V
+	public abstract fun getManifest ()Lcom/stragent/agent/plugin/StrAgentPluginManifest;
+	public abstract fun install (Lcom/stragent/agent/plugin/StrAgentHostContext;)V
+	public abstract fun invoke (Lcom/stragent/agent/plugin/PluginRequest;)Lcom/stragent/agent/plugin/PluginResponse;
+	public abstract fun uninstall ()V
+}
+
+public final class com/stragent/agent/plugin/HostRequirement {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/stragent/agent/plugin/HostRequirement;
+	public static synthetic fun copy$default (Lcom/stragent/agent/plugin/HostRequirement;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/stragent/agent/plugin/HostRequirement;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/plugin/PluginCapability {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/stragent/agent/plugin/PluginCapability;
+	public static synthetic fun copy$default (Lcom/stragent/agent/plugin/PluginCapability;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/stragent/agent/plugin/PluginCapability;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getInputSchemaJson ()Ljava/lang/String;
+	public final fun getKind ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/plugin/PluginRequest {
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/Map;
+	public final fun copy (Ljava/lang/String;Ljava/util/Map;)Lcom/stragent/agent/plugin/PluginRequest;
+	public static synthetic fun copy$default (Lcom/stragent/agent/plugin/PluginRequest;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lcom/stragent/agent/plugin/PluginRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCapability ()Ljava/lang/String;
+	public final fun getPayload ()Ljava/util/Map;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/plugin/PluginResponse {
+	public fun <init> (ZLjava/util/Map;Ljava/lang/String;)V
+	public synthetic fun <init> (ZLjava/util/Map;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Ljava/util/Map;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (ZLjava/util/Map;Ljava/lang/String;)Lcom/stragent/agent/plugin/PluginResponse;
+	public static synthetic fun copy$default (Lcom/stragent/agent/plugin/PluginResponse;ZLjava/util/Map;Ljava/lang/String;ILjava/lang/Object;)Lcom/stragent/agent/plugin/PluginResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()Ljava/lang/String;
+	public final fun getOk ()Z
+	public final fun getPayload ()Ljava/util/Map;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/plugin/Seam {
+	public fun <init> (Ljava/lang/String;Lcom/stragent/agent/plugin/SeamRole;Ljava/lang/String;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/stragent/agent/plugin/SeamRole;Ljava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lcom/stragent/agent/plugin/SeamRole;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Z
+	public final fun copy (Ljava/lang/String;Lcom/stragent/agent/plugin/SeamRole;Ljava/lang/String;Ljava/lang/String;Z)Lcom/stragent/agent/plugin/Seam;
+	public static synthetic fun copy$default (Lcom/stragent/agent/plugin/Seam;Ljava/lang/String;Lcom/stragent/agent/plugin/SeamRole;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lcom/stragent/agent/plugin/Seam;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContract ()Ljava/lang/String;
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getRequired ()Z
+	public final fun getRole ()Lcom/stragent/agent/plugin/SeamRole;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/plugin/SeamRole : java/lang/Enum {
+	public static final field CONSUMER Lcom/stragent/agent/plugin/SeamRole;
+	public static final field DEFINITION Lcom/stragent/agent/plugin/SeamRole;
+	public static final field PROVIDER Lcom/stragent/agent/plugin/SeamRole;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/stragent/agent/plugin/SeamRole;
+	public static fun values ()[Lcom/stragent/agent/plugin/SeamRole;
+}
+
+public final class com/stragent/agent/plugin/StrAgentHost {
+	public fun <init> (Lcom/stragent/agent/plugin/StrAgentHostContext;)V
+	public final fun capabilities ()Ljava/util/List;
+	public final fun get (Ljava/lang/String;)Lcom/stragent/agent/plugin/HostPlugin;
+	public final fun list ()Ljava/util/List;
+	public final fun load (Lcom/stragent/agent/plugin/HostPlugin;)Lcom/stragent/agent/plugin/HostPlugin;
+	public final fun unload (Ljava/lang/String;)V
+}
+
+public final class com/stragent/agent/plugin/StrAgentHostContext {
+	public fun <init> (Lcom/stragent/core/ports/LlmClient;Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/core/ports/DatasetStore;Ljava/io/File;Lkotlin/jvm/functions/Function1;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/core/ports/EmbeddingClient;Lcom/stragent/core/ports/RerankClient;Lcom/stragent/core/ports/QueryDecomposer;Lcom/stragent/core/ports/ChunkContextClient;Lcom/stragent/core/ports/BlockSummarizer;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Ljava/io/File;Lcom/stragent/agent/ReportEngineRegistry;Lcom/stragent/core/report/ReportTypeRegistry;)V
+	public synthetic fun <init> (Lcom/stragent/core/ports/LlmClient;Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/core/ports/DatasetStore;Ljava/io/File;Lkotlin/jvm/functions/Function1;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/core/ports/EmbeddingClient;Lcom/stragent/core/ports/RerankClient;Lcom/stragent/core/ports/QueryDecomposer;Lcom/stragent/core/ports/ChunkContextClient;Lcom/stragent/core/ports/BlockSummarizer;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Ljava/io/File;Lcom/stragent/agent/ReportEngineRegistry;Lcom/stragent/core/report/ReportTypeRegistry;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/stragent/core/ports/LlmClient;
+	public final fun component10 ()Lcom/stragent/core/ports/ChunkContextClient;
+	public final fun component11 ()Lcom/stragent/core/ports/BlockSummarizer;
+	public final fun component12 ()Lkotlin/jvm/functions/Function2;
+	public final fun component13 ()Lkotlin/jvm/functions/Function1;
+	public final fun component14 ()Ljava/io/File;
+	public final fun component15 ()Lcom/stragent/agent/ReportEngineRegistry;
+	public final fun component16 ()Lcom/stragent/core/report/ReportTypeRegistry;
+	public final fun component2 ()Lcom/stragent/core/ports/PrefsStore;
+	public final fun component3 ()Lcom/stragent/core/ports/DatasetStore;
+	public final fun component4 ()Ljava/io/File;
+	public final fun component5 ()Lkotlin/jvm/functions/Function1;
+	public final fun component6 ()Lcom/stragent/core/ports/SearchClient;
+	public final fun component7 ()Lcom/stragent/core/ports/EmbeddingClient;
+	public final fun component8 ()Lcom/stragent/core/ports/RerankClient;
+	public final fun component9 ()Lcom/stragent/core/ports/QueryDecomposer;
+	public final fun copy (Lcom/stragent/core/ports/LlmClient;Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/core/ports/DatasetStore;Ljava/io/File;Lkotlin/jvm/functions/Function1;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/core/ports/EmbeddingClient;Lcom/stragent/core/ports/RerankClient;Lcom/stragent/core/ports/QueryDecomposer;Lcom/stragent/core/ports/ChunkContextClient;Lcom/stragent/core/ports/BlockSummarizer;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Ljava/io/File;Lcom/stragent/agent/ReportEngineRegistry;Lcom/stragent/core/report/ReportTypeRegistry;)Lcom/stragent/agent/plugin/StrAgentHostContext;
+	public static synthetic fun copy$default (Lcom/stragent/agent/plugin/StrAgentHostContext;Lcom/stragent/core/ports/LlmClient;Lcom/stragent/core/ports/PrefsStore;Lcom/stragent/core/ports/DatasetStore;Ljava/io/File;Lkotlin/jvm/functions/Function1;Lcom/stragent/core/ports/SearchClient;Lcom/stragent/core/ports/EmbeddingClient;Lcom/stragent/core/ports/RerankClient;Lcom/stragent/core/ports/QueryDecomposer;Lcom/stragent/core/ports/ChunkContextClient;Lcom/stragent/core/ports/BlockSummarizer;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Ljava/io/File;Lcom/stragent/agent/ReportEngineRegistry;Lcom/stragent/core/report/ReportTypeRegistry;ILjava/lang/Object;)Lcom/stragent/agent/plugin/StrAgentHostContext;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBlockSummarizer ()Lcom/stragent/core/ports/BlockSummarizer;
+	public final fun getBodyListener ()Lkotlin/jvm/functions/Function1;
+	public final fun getCheckpointDir ()Ljava/io/File;
+	public final fun getChunkContext ()Lcom/stragent/core/ports/ChunkContextClient;
+	public final fun getEmbedding ()Lcom/stragent/core/ports/EmbeddingClient;
+	public final fun getKv ()Lcom/stragent/core/ports/DatasetStore;
+	public final fun getLlm ()Lcom/stragent/core/ports/LlmClient;
+	public final fun getModelResolver ()Lkotlin/jvm/functions/Function1;
+	public final fun getPluginDir ()Ljava/io/File;
+	public final fun getPrefs ()Lcom/stragent/core/ports/PrefsStore;
+	public final fun getProgressListener ()Lkotlin/jvm/functions/Function2;
+	public final fun getQueryDecomposer ()Lcom/stragent/core/ports/QueryDecomposer;
+	public final fun getReportEngines ()Lcom/stragent/agent/ReportEngineRegistry;
+	public final fun getReportTypes ()Lcom/stragent/core/report/ReportTypeRegistry;
+	public final fun getRerank ()Lcom/stragent/core/ports/RerankClient;
+	public final fun getSearch ()Lcom/stragent/core/ports/SearchClient;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/stragent/agent/plugin/StrAgentPlugin : com/stragent/agent/plugin/HostPlugin {
+	public fun <init> ()V
+	public fun activate ()V
+	public final fun askFollowup (Lcom/stragent/core/dataset/Dataset;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;Lcom/stragent/core/ports/EmbeddingClient;Lcom/stragent/core/ports/RerankClient;Ljava/lang/String;Lcom/stragent/core/ports/QueryDecomposer;Lcom/stragent/core/ports/ChunkContextClient;Lcom/stragent/core/ports/BlockSummarizer;)Lcom/stragent/core/ai/ChatResult;
+	public static synthetic fun askFollowup$default (Lcom/stragent/agent/plugin/StrAgentPlugin;Lcom/stragent/core/dataset/Dataset;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;Lcom/stragent/core/ports/EmbeddingClient;Lcom/stragent/core/ports/RerankClient;Ljava/lang/String;Lcom/stragent/core/ports/QueryDecomposer;Lcom/stragent/core/ports/ChunkContextClient;Lcom/stragent/core/ports/BlockSummarizer;ILjava/lang/Object;)Lcom/stragent/core/ai/ChatResult;
+	public fun capabilities ()Ljava/util/List;
+	public fun deactivate ()V
+	public final fun generateInsight (Lcom/stragent/core/dataset/Dataset;ZLjava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;Lcom/stragent/core/observability/OtelSpanContext;Lkotlin/jvm/functions/Function1;Ljava/lang/Double;Ljava/util/Map;)Lcom/stragent/core/ai/InsightResult;
+	public static synthetic fun generateInsight$default (Lcom/stragent/agent/plugin/StrAgentPlugin;Lcom/stragent/core/dataset/Dataset;ZLjava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;Lcom/stragent/core/observability/OtelSpanContext;Lkotlin/jvm/functions/Function1;Ljava/lang/Double;Ljava/util/Map;ILjava/lang/Object;)Lcom/stragent/core/ai/InsightResult;
+	public final fun getEngine ()Lcom/stragent/agent/AgentIntegratedOrchestrator;
+	public fun getManifest ()Lcom/stragent/agent/plugin/StrAgentPluginManifest;
+	public final fun getRegistryOf ()Lcom/stragent/agent/PluginRegistry;
+	public fun install (Lcom/stragent/agent/plugin/StrAgentHostContext;)V
+	public fun invoke (Lcom/stragent/agent/plugin/PluginRequest;)Lcom/stragent/agent/plugin/PluginResponse;
+	public final fun isActive ()Z
+	public fun uninstall ()V
+}
+
+public final class com/stragent/agent/plugin/StrAgentPluginManifest {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Ljava/util/List;
+	public final fun component11 ()Ljava/util/List;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()I
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/util/List;
+	public final fun component8 ()Ljava/util/List;
+	public final fun component9 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;)Lcom/stragent/agent/plugin/StrAgentPluginManifest;
+	public static synthetic fun copy$default (Lcom/stragent/agent/plugin/StrAgentPluginManifest;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lcom/stragent/agent/plugin/StrAgentPluginManifest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContributes ()Ljava/util/List;
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getInject ()Ljava/util/List;
+	public final fun getKind ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getPluginType ()Ljava/util/List;
+	public final fun getProvides ()Ljava/util/List;
+	public final fun getRequiredHost ()Ljava/util/List;
+	public final fun getSchemaVersion ()I
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun toDshManifestJson ()Lkotlinx/serialization/json/JsonObject;
+	public final fun toJson ()Lkotlinx/serialization/json/JsonObject;
+	public fun toString ()Ljava/lang/String;
+}
+

@@ -1,0 +1,25 @@
+{
+  "name": "str-agent",
+  "version": "1.0.0",
+  "description": "确定性数字溯源的数据分析 Agent 引擎插件：报告/追问/审查/编辑部多 Agent，每个数字可回溯到原始行。能力打包为一个 MCP 服务器，任意 MCP 宿主即插即用（ZCode / DeepSeek Harness / Claude Code / Cursor 等）。",
+  "author": {
+    "name": "ZCX"
+  },
+  "skills": "./skills",
+  "commands": "./commands",
+  "mcpServers": {
+    "str-agent": {
+      "command": "java",
+      "args": [
+        "-cp",
+        "${CLAUDE_PLUGIN_ROOT}/host/build/install/str-agent-mcp/lib/*",
+        "com.stragent.host.HostMainKt",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "STRAGENT_HOME": "${CLAUDE_PLUGIN_ROOT}/.str-agent-home"
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  XXE 回归夹具 · docx 的 word/document.xml（T-140）
+
+  这是一个**恶意**的 Word XML：它声明一个指向本地文件的外部实体，
+  并在正文里引用它。未经 XXE 防护的解析器会把该文件的内容读进文本流。
+
+  `__XXE_ENTITY_URI__` 由测试在运行时替换成**绝对 file:// URI**
+  （指向测试自己创建的哨兵文件）——绝对路径是必须的：相对路径可能因为
+  「解析器找不到 base URI」而**解析不出来**，那样测试就会**假绿**
+  （看起来挡住了，其实只是没触发）。
+
+  哨兵内容固定为 XXE_CANARY_9f3a —— 无害字符串，绝不指向任何真实文件。
+-->
+<!DOCTYPE w:document [
+  <!ENTITY xxe SYSTEM "__XXE_ENTITY_URI__">
+]>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p><w:r><w:t>&xxe;</w:t></w:r></w:p>
+    <w:tbl>
+      <w:tr><w:tc><w:p><w:r><w:t>表头列</w:t></w:r></w:p></w:tc></w:tr>
+      <w:tr>
+        <w:tc><w:p><w:r><w:t>单元格内容</w:t></w:r></w:p></w:tc>
+        <!-- 载荷必须**同时**出现在段落与表格单元格里：
+             parseDocxBody 取全文（段落路径），parseDocxTables 只取表格（表格路径）——
+             只放在段落里的话，表格路径的用例会「因错误的原因而绿」。 -->
+        <w:tc><w:p><w:r><w:t>&xxe;</w:t></w:r></w:p></w:tc>
+      </w:tr>
+    </w:tbl>
+  </w:body>
+</w:document>

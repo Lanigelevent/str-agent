@@ -1,0 +1,17 @@
+{
+  "builtins": [
+    "print", "len", "range", "min", "max", "sum", "abs", "round",
+    "enumerate", "zip", "sorted", "reversed", "map", "filter",
+    "list", "dict", "tuple", "set", "str", "int", "float", "bool",
+    "type", "isinstance", "hasattr", "getattr", "setattr",
+    "open", "format", "repr", "all", "any", "divmod", "pow",
+    "hex", "bin", "oct", "chr", "ord", "frozenset",
+    "ValueError", "TypeError", "KeyError", "IndexError", "Exception",
+    "StopIteration", "ZeroDivisionError", "AttributeError"
+  ],
+  "allowed_imports": [
+    "json", "math", "statistics", "itertools", "functools",
+    "collections", "datetime", "re", "string", "random",
+    "pandas", "numpy", "matplotlib", "scipy"
+  ]
+}

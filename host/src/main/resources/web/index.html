@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Str Agent 驾驶舱</title>
+<style>
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --text: #1c2733; --muted: #5b6b7b;
+  --accent: #2563eb; --accent-soft: #dbeafe; --border: #dbe2ea;
+  --ok: #16a34a; --warn: #d97706; --err: #dc2626;
+  --shadow: 0 1px 3px rgba(28,39,51,.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #10151b; --panel: #1a2129; --text: #e6ecf2; --muted: #93a4b5;
+    --accent: #60a5fa; --accent-soft: #1e3a5f; --border: #2a3542;
+    --shadow: 0 1px 3px rgba(0,0,0,.4);
+  }
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: var(--bg); color: var(--text); font-size: 14px;
+}
+header {
+  display:flex; align-items:center; gap:16px; padding:12px 20px;
+  background: var(--panel); border-bottom:1px solid var(--border);
+  position:sticky; top:0; z-index:5; flex-wrap:wrap;
+}
+header h1 { font-size:16px; font-weight:600; }
+.lamp { width:10px; height:10px; border-radius:50%; background:var(--err); flex-shrink:0; }
+.lamp.on { background:var(--ok); animation:pulse 2s infinite; }
+.lamp.reconnecting { background:var(--warn); animation:pulse 1s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.45; } }
+.meta { color:var(--muted); font-size:12px; }
+nav { display:flex; gap:4px; margin-left:auto; }
+nav button {
+  border:0; background:transparent; color:var(--muted); padding:8px 14px;
+  border-radius:6px; cursor:pointer; font-size:14px;
+}
+nav button[aria-selected="true"] { background:var(--accent-soft); color:var(--accent); font-weight:600; }
+main { max-width:1100px; margin:20px auto; padding:0 16px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+.card {
+  background:var(--panel); border:1px solid var(--border); border-radius:10px;
+  padding:16px; box-shadow:var(--shadow);
+}
+.card .num { font-size:26px; font-weight:700; margin-top:4px; }
+.card .label { color:var(--muted); font-size:12px; }
+section[hidden] { display:none; }
+table { width:100%; border-collapse:collapse; background:var(--panel);
+  border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+th, td { text-align:left; padding:9px 12px; border-bottom:1px solid var(--border); font-size:13px; }
+th { background:var(--accent-soft); color:var(--accent); font-weight:600; }
+tr:last-child td { border-bottom:0; }
+.panel { background:var(--panel); border:1px solid var(--border); border-radius:10px;
+  padding:16px; margin-bottom:12px; box-shadow:var(--shadow);
+  animation:enter .15s ease-out; }
+@keyframes enter { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce) {
+  .panel { animation:none; }
+  .lamp.on, .lamp.reconnecting { animation:none; }
+}
+.report-body { line-height:1.75; }
+.report-body h1, .report-body h2, .report-body h3, .report-body h4 { margin:14px 0 8px; }
+.report-body table { margin:10px 0; }
+.badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px;
+  background:var(--accent-soft); color:var(--accent); margin-left:8px; }
+.badge.fail { background:#fee2e2; color:var(--err); }
+input[type="search"] {
+  width:100%; padding:9px 12px; margin-bottom:12px; border:1px solid var(--border);
+  border-radius:8px; background:var(--panel); color:var(--text); font-size:14px;
+}
+.empty { text-align:center; color:var(--muted); padding:48px 0; }
+.excerpt { color:var(--muted); font-size:12px; margin-top:6px; }
+.trace { color:var(--muted); font-size:11px; margin-top:6px; font-family:ui-monospace,monospace; }
+li { margin-left:18px; }
+</style>
+</head>
+<body>
+<header>
+  <span class="lamp" id="lamp" role="status" aria-label="SSE 连接状态"></span>
+  <h1>Str Agent 驾驶舱</h1>
+  <span class="meta" id="meta">连接中…</span>
+  <nav role="tablist" aria-label="驾驶舱分区">
+    <button role="tab" id="tab-overview" aria-selected="true" aria-controls="sec-overview">总览</button>
+    <button role="tab" id="tab-datasets" aria-selected="false" aria-controls="sec-datasets">数据集</button>
+    <button role="tab" id="tab-reports" aria-selected="false" aria-controls="sec-reports">报告</button>
+    <button role="tab" id="tab-actions" aria-selected="false" aria-controls="sec-actions">操作</button>
+    <button role="tab" id="tab-events" aria-selected="false" aria-controls="sec-events">事件</button>
+  </nav>
+</header>
+<main>
+  <section id="sec-overview" role="tabpanel" aria-labelledby="tab-overview">
+    <div class="grid">
+      <div class="card"><div class="label">报告次数</div><div class="num" id="ov-calls">–</div></div>
+      <div class="card"><div class="label">token 合计</div><div class="num" id="ov-tokens">–</div></div>
+      <div class="card"><div class="label">报告 P50</div><div class="num" id="ov-p50">–</div></div>
+      <div class="card"><div class="label">报告 P95</div><div class="num" id="ov-p95">–</div></div>
+    </div>
+    <h3 style="margin:18px 0 10px">用量与成本（T-171）</h3>
+    <div class="panel" id="ov-usage">–</div>
+    <h3 style="margin:18px 0 10px">水位线（T-174）</h3>
+    <div class="panel" id="ov-watermarks">–</div>
+    <h3 style="margin:18px 0 10px">指引</h3>
+    <div class="panel" id="ov-recent">打开方式：<code>/ui?token=&lt;MCP token&gt;</code>——数据端点与事件流同一套鉴权。</div>
+  </section>
+  <section id="sec-datasets" role="tabpanel" aria-labelledby="tab-datasets" hidden>
+    <div id="ds-list"><div class="empty">加载中…</div></div>
+  </section>
+  <section id="sec-reports" role="tabpanel" aria-labelledby="tab-reports" hidden>
+    <input type="search" id="rep-filter" placeholder="过滤报告（按 / 聚焦）" aria-label="过滤报告">
+    <div id="rep-list"><div class="empty">加载中…</div></div>
+  </section>
+  <section id="sec-actions" role="tabpanel" aria-labelledby="tab-actions" hidden>
+    <div class="panel">
+      <strong>导入表格</strong>
+      <div style="margin:6px 0"><textarea id="ac-csv" rows="5" style="width:100%" placeholder="门店,销售额&#10;东店,1200"></textarea></div>
+      <input type="text" id="ac-name" placeholder="数据集名称（可空）">
+      <button id="ac-import">导入</button>
+      <div id="ac-import-out" class="trace" style="margin-top:6px"></div>
+    </div>
+    <div class="panel">
+      <strong>生成报告</strong>
+      <div style="margin:6px 0">datasetId：<input type="text" id="ac-rep-ds" style="width:60%"></div>
+      <button id="ac-report">生成（进度见「事件」页，sessionId=ui）</button>
+      <div id="ac-rep-out" class="report-body" style="margin-top:6px"></div>
+    </div>
+    <div class="panel">
+      <strong>追问</strong>
+      <div style="margin:6px 0">datasetId：<input type="text" id="ac-fu-ds" style="width:60%"></div>
+      <div style="margin:6px 0"><input type="text" id="ac-fu-q" style="width:100%" placeholder="要问的问题"></div>
+      <button id="ac-ask">提问</button>
+      <div id="ac-fu-out" class="report-body" style="margin-top:6px"></div>
+    </div>
+    <div class="empty">调用经 /ui/call 以固定 ui 会话分发——事件页选 sessionId=ui 可看逐章进度。</div>
+  </section>
+  <section id="sec-events" role="tabpanel" aria-labelledby="tab-events" hidden>
+    <input type="search" id="evt-filter" placeholder="过滤事件（按 / 聚焦）" aria-label="过滤事件">
+    <div id="evt-list"><div class="empty">等待事件…</div></div>
+  </section>
+</main>
+<script>
+"use strict";
+var params = new URLSearchParams(location.search);
+var token = params.get("token") || "";
+var authQ = token ? ("token=" + encodeURIComponent(token)) : "";
+
+/* ---------- 鉴权 fetch ---------- */
+function fetchData(name) {
+  return fetch("/ui/data/" + name + (authQ ? "?" + authQ : "")).then(function (res) {
+    if (res.status === 401) {
+      throw new Error("401：token 缺失或无效——请用 /ui?token=<MCP token> 重新打开");
+    }
+    if (!res.ok) { throw new Error("HTTP " + res.status); }
+    return res.json();
+  });
+}
+
+/* ---------- 最小 Markdown 渲染（先转义再转换，防注入） ---------- */
+function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function renderReport(text) {
+  var lines = esc(text).split("\n");
+  var html = "", inTable = false, inList = false;
+  function closeAll() {
+    if (inTable) { html += "</tbody></table>"; inTable = false; }
+    if (inList) { html += "</ul>"; inList = false; }
+  }
+  lines.forEach(function (raw) {
+    var line = raw.trim();
+    if (line.charAt(0) === "|" && line.charAt(line.length - 1) === "|") {
+      var cells = line.slice(1, -1).split("|").map(function (c) { return c.trim(); });
+      var isSep = cells.every(function (c) { return /^:?-{2,}:?$/.test(c); });
+      if (isSep) { return; }
+      if (!inTable) { closeAll(); html += "<table><tbody>"; inTable = true; }
+      html += "<tr>" + cells.map(function (c) { return "<td>" + c + "</td>"; }).join("") + "</tr>";
+      return;
+    }
+    var heading = line.match(/^#{1,3}\s(.*)$/);
+    if (heading) { closeAll(); var n = line.match(/^#+/)[0].length;
+      html += "<h" + (n + 1) + ">" + heading[1] + "</h" + (n + 1) + ">"; return; }
+    if (/^[-*]\s/.test(line)) {
+      if (!inList) { closeAll(); html += "<ul>"; inList = true; }
+      html += "<li>" + line.replace(/^[-*]\s*/, "") + "</li>"; return;
+    }
+    if (line === "") { closeAll(); return; }
+    closeAll();
+    html += "<p>" + line.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>") + "</p>";
+  });
+  closeAll();
+  return html;
+}
+
+/* ---------- 标签页 ---------- */
+var tabs = ["overview", "datasets", "reports", "actions", "events"];
+tabs.forEach(function (name) {
+  document.getElementById("tab-" + name).addEventListener("click", function () {
+    tabs.forEach(function (t) {
+      document.getElementById("tab-" + t).setAttribute("aria-selected", String(t === name));
+      document.getElementById("sec-" + t).hidden = (t !== name);
+    });
+  });
+});
+
+/* ---------- 数据渲染 ---------- */
+function fmtMs(v) { return v > 0 ? (v >= 1000 ? (v / 1000).toFixed(1) + " s" : v + " ms") : "–"; }
+function renderOverview(d) {
+  document.getElementById("meta").textContent =
+    "v" + d.version + " · 运行 " + Math.round(d.uptimeMs / 1000) + " s" +
+    (d.otelMetricsConfigured ? " · OTel 已接" : "");
+  document.getElementById("ov-calls").textContent = d.reports.count;
+  document.getElementById("ov-tokens").textContent = d.reports.tokensTotal;
+  document.getElementById("ov-p50").textContent = fmtMs(d.reports.p50Ms);
+  document.getElementById("ov-p95").textContent = fmtMs(d.reports.p95Ms);
+  // T-171：累计用量与成本（金额恒为估算；未配单价则显示「未配单价」，不写 0）
+  var u = d.usage;
+  var box = document.getElementById("ov-usage");
+  if (!u) {
+    box.textContent = "本服务未启用用量账本。";
+  } else {
+    var cost = u.totals.estCostUsd !== undefined
+      ? "$" + u.totals.estCostUsd.toFixed(4) + "（估算）"
+      : "未配单价（不估算金额）";
+    var rows = (u.byTool || []).map(function (t) {
+      return "<tr><td>" + esc(t.tool) + "</td><td>" + t.calls + "</td><td>" + t.tokens + "</td><td>" +
+        (t.estCostUsd !== undefined ? "$" + t.estCostUsd.toFixed(4) : "–") + "</td></tr>";
+    }).join("");
+    box.innerHTML =
+      "<div>累计调用 <b>" + u.totals.calls + "</b> 次 · token <b>" + u.totals.tokens + "</b> · 成本 " + cost + "</div>" +
+      (rows ? "<table style=\"margin-top:8px\"><thead><tr><th>工具</th><th>次数</th><th>token</th><th>估算金额</th></tr></thead><tbody>" + rows + "</tbody></table>" : "");
+  }
+  // T-174：水位线（当前值 / 上限 / 口径）
+  var w = d.watermarks;
+  var wbox = document.getElementById("ov-watermarks");
+  if (!w) { wbox.textContent = "本服务未提供水位线视图。"; return; }
+  var wrows = (w.lines || []).map(function (l) {
+    return "<tr><td>" + esc(l.metric) + "</td><td>" + l.current + " " + esc(l.unit) + "</td><td>" +
+      (l.limit !== undefined ? l.limit : "无硬上限") + "</td><td>" + esc(l.note || "") + "</td></tr>";
+  }).join("");
+  wbox.innerHTML =
+    "<table><thead><tr><th>维度</th><th>当前</th><th>上限</th><th>口径</th></tr></thead><tbody>" + wrows + "</tbody></table>";
+}
+function renderDatasets(d) {
+  var box = document.getElementById("ds-list");
+  if (!d.items.length) {
+    box.innerHTML = '<div class="empty">暂无数据集——先用 stragent_import_table 导入</div>';
+    return;
+  }
+  box.innerHTML = "<table><thead><tr><th>名称</th><th>行</th><th>列</th><th>datasetId</th><th>状态</th></tr></thead><tbody>" +
+    d.items.map(function (i) {
+      return "<tr><td>" + esc(i.name) + "</td><td>" + i.rows + "</td><td>" + i.columns + "</td><td>" +
+        esc(i.id) + "</td><td>" + (i.truncated ? "截断" : "全量") +
+        (i.persisted ? " · 已落盘" : "") + "</td></tr>";
+    }).join("") + "</tbody></table>";
+}
+function renderReports(d) {
+  var box = document.getElementById("rep-list");
+  if (!d.items.length) { box.innerHTML = '<div class="empty">暂无报告</div>'; return; }
+  box.innerHTML = d.items.map(function (r, i) {
+    return '<div class="panel" data-text="' +
+      esc((r.datasetName + " " + r.reportText.slice(0, 500))).replace(/"/g, "&quot;") + '">' +
+      "<strong>#" + (i + 1) + " " + esc(r.datasetName) + "</strong>" +
+      '<span class="badge' + (r.gateFailed ? " fail" : "") + '">' + esc(r.engineId) +
+      (r.gateFailed ? " · 门禁未清零" : "") + "</span>" +
+      '<div class="excerpt">' + esc(r.reportText.slice(0, 160)) + "…</div>" +
+      '<div class="trace">' + r.totalTokens + " tokens · " + fmtMs(r.durationMs) +
+      (r.traceId ? " · trace " + esc(r.traceId) : "") + "</div>" +
+      '<details style="margin-top:8px"><summary style="cursor:pointer;color:var(--accent)">展开全文</summary>' +
+      '<div class="report-body">' + renderReport(r.reportText) + "</div>" +
+      (r.charts ? r.charts.map(function (c) {
+        return '<div class="chart" style="margin-top:12px"><div style="font-weight:600;margin-bottom:4px">' +
+          esc(c.title) + "</div>" + c.svg + "</div>";
+      }).join("") : "") +
+      "</details></div>";
+  }).join("");
+}
+function applyFilter(inputId, selector) {
+  var q = document.getElementById(inputId).value.trim().toLowerCase();
+  document.querySelectorAll(selector).forEach(function (el) {
+    el.hidden = q !== "" && String(el.getAttribute("data-text") || "").toLowerCase().indexOf(q) === -1;
+  });
+}
+document.getElementById("rep-filter").addEventListener("input", function () {
+  applyFilter("rep-filter", "#rep-list .panel");
+});
+document.getElementById("evt-filter").addEventListener("input", function () {
+  applyFilter("evt-filter", "#evt-list .panel");
+});
+document.addEventListener("keydown", function (e) {
+  if (e.key === "/" && ["INPUT", "TEXTAREA"].indexOf(document.activeElement.tagName) === -1) {
+    e.preventDefault();
+    var visible = document.getElementById("sec-reports").hidden ? "evt-filter" : "rep-filter";
+    document.getElementById(visible).focus();
+  }
+});
+
+/* ---------- 操作（T-123 写侧闭环：/ui/call 固定 ui 会话） ---------- */
+function postUiCall(name, args) {
+  return fetch("/ui/call" + (authQ ? "?" + authQ : ""), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: name, arguments: args }),
+  }).then(function (res) { return res.json(); });
+}
+document.getElementById("ac-import").addEventListener("click", function () {
+  var csv = document.getElementById("ac-csv").value;
+  var name = document.getElementById("ac-name").value;
+  if (!csv.trim()) { return; }
+  postUiCall("stragent_import_table", { csv: csv, name: name }).then(function (r) {
+    var sc = r.structuredContent || r;
+    document.getElementById("ac-import-out").textContent =
+      "datasetId=" + (sc.datasetId || "?") + " · rows=" + (sc.rows || 0);
+    document.getElementById("ac-rep-ds").value = sc.datasetId || "";
+    document.getElementById("ac-fu-ds").value = sc.datasetId || "";
+  }).catch(function (e) { document.getElementById("ac-import-out").textContent = "失败：" + e; });
+});
+document.getElementById("ac-report").addEventListener("click", function () {
+  var ds = document.getElementById("ac-rep-ds").value;
+  if (!ds.trim()) { return; }
+  document.getElementById("ac-rep-out").innerHTML = '<div class="empty">生成中…（进度见「事件」页）</div>';
+  postUiCall("stragent_generate_report", { datasetId: ds }).then(function (r) {
+    var sc = r.structuredContent || {};
+    document.getElementById("ac-rep-out").innerHTML =
+      '<div class="trace">tokens ' + (sc.totalTokens || 0) +
+      ' · 门禁' + (sc.gateFailed ? "未清零" : "通过") + '</div>' + renderReport(sc.report || "");
+  }).catch(function (e) { document.getElementById("ac-rep-out").textContent = "失败：" + e; });
+});
+document.getElementById("ac-ask").addEventListener("click", function () {
+  var ds = document.getElementById("ac-fu-ds").value;
+  var q = document.getElementById("ac-fu-q").value;
+  if (!ds.trim() || !q.trim()) { return; }
+  postUiCall("stragent_ask_followup", { datasetId: ds, question: q }).then(function (r) {
+    var sc = r.structuredContent || {};
+    document.getElementById("ac-fu-out").innerHTML =
+      '<div class="panel"><strong>问：</strong>' + esc(q) + '</div>' +
+      '<div class="panel"><strong>答：</strong>' + esc(sc.answer || r.content || "") +
+      (sc.subQueries && sc.subQueries.length ? '<div class="trace">子查询：' + sc.subQueries.map(esc).join("；") + '</div>' : "") +
+      '<div class="trace">门禁' + (sc.gateFailed ? "未清零（回答含未溯源数字）" : "通过") + '</div></div>';
+  }).catch(function (e) { document.getElementById("ac-fu-out").textContent = "失败：" + e; });
+});
+
+/* ---------- 事件流（SSE + 断线灯 + 无 token 不空转） ---------- */
+var evtBox = document.getElementById("evt-list");
+var evtCount = 0;
+function addEvent(text, isError) {
+  if (evtCount === 0) { evtBox.innerHTML = ""; }
+  var div = document.createElement("div");
+  div.className = "panel";
+  div.setAttribute("data-text", text);
+  var time = new Date().toLocaleTimeString();
+  div.innerHTML = '<span class="meta">' + time + "</span><div>" + esc(text) + "</div>";
+  evtBox.insertBefore(div, evtBox.firstChild);
+  evtCount++;
+  if (evtCount > 300) { var last = evtBox.lastChild; if (last) { evtBox.removeChild(last); } }
+  applyFilter("evt-filter", "#evt-list .panel");
+}
+function connectEvents() {
+  var lamp = document.getElementById("lamp");
+  if (!token) {
+    lamp.className = "lamp";
+    addEvent("未提供 MCP token：请用 /ui?token=<MCP token> 打开本页", true);
+    document.getElementById("meta").textContent = "未鉴权";
+    return;
+  }
+  lamp.className = "lamp reconnecting";
+  var es = new EventSource("/events?" + authQ);
+  es.onopen = function () { lamp.className = "lamp on"; document.getElementById("meta").textContent = "事件流已连接"; };
+  es.onerror = function () {
+    lamp.className = "lamp reconnecting";
+    es.close();
+    setTimeout(connectEvents, 3000);
+  };
+  es.onmessage = function (e) {
+    var text = e.data;
+    try {
+      var data = JSON.parse(e.data);
+      text = data.message || data.body || e.data;
+      addEvent(text, String(text).indexOf("error") >= 0 || String(text).indexOf("失败") >= 0);
+    } catch (_) {
+      addEvent(text, false);
+    }
+  };
+}
+
+/* ---------- 启动：数据拉取 + 30s 轮询（事件走实时 SSE） ---------- */
+function refresh() {
+  fetchData("overview").then(renderOverview).catch(function (err) {
+    document.getElementById("meta").textContent = String(err.message || err);
+  });
+  fetchData("datasets").then(renderDatasets).catch(function () {});
+  fetchData("reports").then(renderReports).catch(function () {});
+}
+connectEvents();
+refresh();
+setInterval(refresh, 30000);
+</script>
+</body>
+</html>

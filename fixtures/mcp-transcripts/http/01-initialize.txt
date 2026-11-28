@@ -1,0 +1,14 @@
+> POST /mcp
+> content-type: application/json
+> authorization: Bearer __MCP_TOKEN__
+> mcp-session-id: sess-snapshot-baseline
+> request-body <<<<
+{"jsonrpc":"2.0","id":1,"params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"snapshot","version":"1.0"}},"method":"initialize"}
+< status: 200
+< content-type: application/json; charset=utf-8
+< mcp-protocol-version: 2026-07-28
+< warning: 299 - "Mcp-Session-Id is deprecated since 2026-07-28; removed after 2027-07-28"
+< x-content-type-options: nosniff
+< x-frame-options: DENY
+< body <<<<
+{"jsonrpc":"2.0","id":1,"result":{"resultType":"complete","protocolVersion":"2025-03-26","capabilities":{"tools":{},"tasks":{"get":true,"update":true,"cancel":true},"elicitation":{},"extensions":{"io.modelcontextprotocol/tasks":{}}},"serverInfo":{"name":"Str Agent","version":"__SERVER_VERSION__"},"supportedVersions":["2026-07-28","2025-06-18","2025-03-26"],"_meta":{"deprecated":{"initialize":true,"removedAfter":"2027-07-28","alternative":"stateless requests (MCP-Protocol-Version header)"}}}}

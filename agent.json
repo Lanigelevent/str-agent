@@ -1,0 +1,14 @@
+{
+  "name": "str-agent",
+  "description": "可信中文数据分析 Agent 引擎（纯插件形态）：导入表格 → 生成章节化分析报告（每个数字可回溯原始行）→ 继续追问。能力打包为 MCP 服务器，宿主各自接线。",
+  "includes": {
+    "plugins": [],
+    "connectors": []
+  },
+  "args": {
+    "mcp_transport": "stdio",
+    "mcp_http_port": 7787,
+    "tier_threshold_rows": 10000,
+    "tool_call_timeout_ms": 600000
+  }
+}
