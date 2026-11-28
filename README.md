@@ -1,5 +1,11 @@
 # STR AGENT · 确定性溯源门禁数据分析 Agent
 
+![CI](https://github.com/Lanigelevent/str-agent/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)
+![JDK](https://img.shields.io/badge/JDK-17%2B-blue.svg)
+![MCP](https://img.shields.io/badge/MCP-2026--07--28-green.svg)
+![Tests](https://img.shields.io/badge/tests-1500%2B-brightgreen.svg)
+
 > 把「导入数据 → 清洗 → 算指标 → 编报告」交给一次工具调用——中文分析报告自动生成，
 > **报告里每一个数字都被机器校验、可回溯到原始行**。技术上是一个纯 JVM agent 插件，
 > 装配为无头 MCP 服务器（stdio / Streamable HTTP 双传输），即插即用进任何 MCP 客户端。
@@ -7,6 +13,10 @@
 **English TL;DR** — a deterministic, provenance-gated data-analysis agent: a headless
 MCP server where every number in a generated report is machine-verified against the
 actual data, and every analysis step is replayable on demand.
+
+**目录**：[为什么不同](#为什么不同门禁是代码不是模型) · [能力一览](#能力一览) · [快速开始](#快速开始) ·
+[架构](#架构) · [文档](#文档) · [测试与质量门禁](#测试与质量门禁) · [安全](#安全) ·
+[提问与反馈](#提问与反馈) · [贡献](#贡献) · [许可](#许可)
 
 ## 为什么不同：门禁是代码，不是模型
 
@@ -28,8 +38,10 @@ actual data, and every analysis step is replayable on demand.
 | 双轨引擎 | tier-1 内存引擎（≤1 万行，报告路径恒走此档）+ tier-2 DuckDB（探索与大聚合），逐样本对拍 |
 | 语义层 | 可执行指标定义（表达式/聚合/维度/时间粒度/单位/自检 DSL），写入时口径冲突检测 |
 | MCP 原生 | stdio + Streamable HTTP 双传输、MCP 2025/2026 协议合规、OAuth 2.1 资源服务器、异步任务、elicitation、进度流式 |
-| 隐私盾（可选档） | LLM 出站 PII 脱敏（确定性单请求映射 `[[P1]]` 占位符）——手机号/身份证/银行卡（带校验和）/邮箱 |
-| 注入加固 | 逐格规则中和（R1–R8）+ 数据载体对抗语料 + 导入时扫描回执 |
+| 隐私盾（可选档） | LLM 出站 PII 脱敏（确定性单请求映射 `[[P1]]` 占位符）——手机号/身份证/银行卡（带校验和）/邮箱 + **密钥与高熵 token 熵回退**（11 类前缀密钥集 + Shannon 熵判定，文件名/域名/UUID 不误伤） |
+| 注入加固 | 逐格规则中和（R1–R8）+ 数据载体对抗语料 + 导入时扫描回执 + **db 回流面四入口注入扫描**（query/sample/表名/列名，恒输出可见） |
+| 溯源时效 | 溯源清单带**数据时点标注**（datasetAsOf，调用时捕获）；导出报告自动带「报告元信息」节（数据集+短哈希+ISO 时点）——时效标注非有效性判断 |
+| 任务句柄恢复 | 任务落盘（JSONL）——宿主重启后终态任务句柄与结果在 TTL 内可取，非终态如实转 failed 不假装续跑 |
 | 诚实降级 | 语义审查可以失败——并且**明说**（`qualityNotes`），绝不静默冒充已审 |
 
 ## 快速开始
@@ -89,6 +101,7 @@ scripts/        工程门禁（lint/文档一致性/变异测试/secret 扫描�
 | [docs/mcp-tool-surface.md](docs/mcp-tool-surface.md) | MCP 工具面运行时快照（默认 44 条） |
 | [docs/QUICKSTART.md](docs/QUICKSTART.md) | 从 CSV 到已验证报告的可运行走查 |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 工程门禁与「改一个工具的完整流程」 |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | 社区行为准则（Contributor Covenant 2.1） |
 
 ## 测试与质量门禁
 
@@ -103,10 +116,18 @@ scripts/        工程门禁（lint/文档一致性/变异测试/secret 扫描�
 信任模型与披露渠道见 [SECURITY.md](SECURITY.md)。除你配置的 LLM 端点（与可选 OTel 导出）外
 工具不主动联网；远程 HTTP 绑定强制 OAuth 2.1（fail-closed）。
 
+## 提问与反馈
+
+使用问题先查 [QUICKSTART](docs/QUICKSTART.md) 与上方文档表；提交 issue 请用模板
+（**Bug 报告** / **能力提案**）。能力提案模板内置定位过滤器自查——涉及自带 UI、NL2SQL、
+SaaS 托管等已声明非目标的提案会被关闭并指向决策文档。
+
 ## 贡献
 
 欢迎 PR——先读 [CONTRIBUTING.md](CONTRIBUTING.md)。本项目刻意携带一套不寻常的工程门禁
 （变异测试、文档一致性、公开 API 快照检查），CONTRIBUTING 解释每条为什么存在。
+PR 请走 [PR 模板](.github/PULL_REQUEST_TEMPLATE.md)（内置门禁清单与定位过滤器自查）；
+社区行为准则见 [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)（Contributor Covenant 2.1）。
 
 ## 许可
 

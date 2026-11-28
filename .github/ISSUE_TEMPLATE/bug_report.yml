@@ -1,0 +1,65 @@
+name: Bug 报告
+description: 报告 str-agent 的行为与文档/预期不符
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢报告问题。请先跑一遍 [QUICKSTART](https://github.com/Lanigelevent/str-agent/blob/main/docs/QUICKSTART.md) 确认环境就绪；
+        **请在日志/回执片段里自行脱敏业务数据**（本工具的溯源回执可能含你的数据内容）。
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 发生了什么
+      description: 同时说明你期望的行为。
+      placeholder: 期望 X，实际 Y；关键回执片段（已脱敏）。
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: 复现步骤
+      description: 给出可复现的最小步骤（工具调用序列或命令行）。
+      placeholder: |
+        1. stragent_import_table 导入 …
+        2. stragent_generate_report …
+    validations:
+      required: true
+
+  - type: dropdown
+    id: transport
+    attributes:
+      label: 传输形态
+      options:
+        - stdio
+        - Streamable HTTP（Bearer）
+        - Streamable HTTP（OAuth 2.1）
+    validations:
+      required: true
+
+  - type: input
+    id: env
+    attributes:
+      label: 环境
+      description: JDK 版本 + 操作系统
+      placeholder: "JDK 17.0.10 / Windows 11 或 ubuntu 22.04"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志/回执片段（已脱敏）
+      description: 相关的错误行、qualityNotes、provenance 回执。
+      placeholder: 贴关键片段即可
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 确认
+      options:
+        - label: 我已读 QUICKSTART 并确认这不是环境/配置问题
+          required: true
+        - label: 我理解并同意遵守 [行为准则](https://github.com/Lanigelevent/str-agent/blob/main/CODE_OF_CONDUCT.md)
+          required: true

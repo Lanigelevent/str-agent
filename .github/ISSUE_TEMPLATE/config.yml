@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 使用问题与排障
+    url: https://github.com/Lanigelevent/str-agent/blob/main/docs/QUICKSTART.md
+    about: 多数接入与排障问题在 QUICKSTART（从 CSV 到已验证报告的可运行走查）与文档表里有现成答案；提交 issue 前请先查阅

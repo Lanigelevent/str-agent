@@ -1,0 +1,39 @@
+name: 能力提案
+description: 提议新能力或改进——请先对照项目定位过滤器自查
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        本项目有明确的定位边界（本地优先、仅作为 MCP 工具存在、零三方运行时依赖）。
+        提案前请自查：是否涉及自带 UI、多租户/成本看板、NL2SQL、SaaS 托管、浏览器自动化、
+        语音/移动端、内容生成、推理引擎自研——这些是**明确的非目标**（README 与 D3 决策文档有完整清单）。
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 要解决的问题
+      description: 描述场景与痛点，而不是直接给方案。
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 期望的能力与理由
+      description: 你期望的行为；如果知道同类工具怎么做的，可一并说明。
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: positioning
+    attributes:
+      label: 定位自查
+      description: 项目非目标清单见 README 与 [D3 决策文档](https://github.com/Lanigelevent/str-agent/blob/main/docs/D3-decisions.md)
+      options:
+        - label: 本提案不涉及自带 UI / SaaS 托管 / NL2SQL / 浏览器自动化等已声明的非目标
+          required: true
+        - label: 本提案可在零三方运行时依赖（纯 JDK）内实现，或说明为何值得破例
+          required: true
+        - label: 我理解并同意遵守 [行为准则](https://github.com/Lanigelevent/str-agent/blob/main/CODE_OF_CONDUCT.md)
+          required: true
