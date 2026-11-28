@@ -3720,6 +3720,46 @@ public final class com/stragent/core/stats/AnalysisResult$Columns {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/stragent/core/stats/Arima {
+	public static final field INSTANCE Lcom/stragent/core/stats/Arima;
+	public final fun fitGrid (Ljava/util/List;)Lcom/stragent/core/stats/Arima$ArimaFit;
+	public final fun forecastPoints (Ljava/util/List;Lcom/stragent/core/stats/Arima$ArimaFit;I)Ljava/util/List;
+	public final fun inSampleSse (Ljava/util/List;Lcom/stragent/core/stats/Arima$ArimaFit;)D
+}
+
+public final class com/stragent/core/stats/Arima$ArimaFit {
+	public fun <init> (IIILjava/util/List;Ljava/util/List;DDDDILjava/util/List;Ljava/util/List;)V
+	public final fun component1 ()I
+	public final fun component10 ()I
+	public final fun component11 ()Ljava/util/List;
+	public final fun component12 ()Ljava/util/List;
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()Ljava/util/List;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()D
+	public final fun component7 ()D
+	public final fun component8 ()D
+	public final fun component9 ()D
+	public final fun copy (IIILjava/util/List;Ljava/util/List;DDDDILjava/util/List;Ljava/util/List;)Lcom/stragent/core/stats/Arima$ArimaFit;
+	public static synthetic fun copy$default (Lcom/stragent/core/stats/Arima$ArimaFit;IIILjava/util/List;Ljava/util/List;DDDDILjava/util/List;Ljava/util/List;ILjava/lang/Object;)Lcom/stragent/core/stats/Arima$ArimaFit;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBic ()D
+	public final fun getD ()I
+	public final fun getDiffed ()Ljava/util/List;
+	public final fun getIntercept ()D
+	public final fun getNObs ()I
+	public final fun getP ()I
+	public final fun getPhi ()Ljava/util/List;
+	public final fun getQ ()I
+	public final fun getResiduals ()Ljava/util/List;
+	public final fun getSigma2 ()D
+	public final fun getSse ()D
+	public final fun getTheta ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/stragent/core/stats/AttributionChain {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;DDDLjava/util/List;Ljava/lang/String;Ljava/lang/String;)V
 	public final fun component1 ()Ljava/lang/String;

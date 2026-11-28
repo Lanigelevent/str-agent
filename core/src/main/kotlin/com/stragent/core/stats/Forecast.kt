@@ -16,7 +16,8 @@ import com.stragent.core.dataset.Dataset
  * 诚实边界（写进工具描述，不冒称）：
  *  - Holt-Winters 为加法模型（乘法模型在数据含零或负值时不稳定）
  *  - 季节周期 m 需调用方指定或默认 12（月度）；数据不足 2 个完整周期时回落 Holt
- *  - 不做 ARIMA（需要差分阶数判断与自相关分析，纯 JVM 无统计库时实现成本高）
+ *  - ARIMA(p,d,q) 最小档已接入（T-209）：网格 BIC 选优 + Hannan-Rissanen 两阶段估计，
+ *    见 Arima.kt（诚实边界随附）
  *  - 置信区间基于残差标准误差的正态近似（1.96σ = 95%），不是精确预测区间
  *  - 数据点 < 3 时拒绝预测（参数估不出来）
  */
@@ -29,7 +30,7 @@ data class ForecastPoint(
 )
 
 data class ForecastResult(
-    val method: String,       // "ses" | "holt" | "holtwinters" | "none"
+    val method: String,       // "ses" | "holt" | "holtwinters" | "arima" | "none"
     val alpha: Double,        // 平滑参数
     val beta: Double?,        // 趋势平滑参数（仅 Holt / Holt-Winters）
     val gamma: Double? = null,// 季节平滑参数（仅 Holt-Winters）
@@ -419,11 +420,49 @@ fun autoForecast(
 
     // 三选一：SSE 最小者胜出
     data class Candidate(val name: String, val sse: Double, val alpha: Double, val beta: Double?, val gamma: Double?, val rmse: Double)
-    val candidates = listOfNotNull(
-        sesResult?.let { Candidate("ses", it.second.sse, it.second.alpha, null, null, it.second.rmse) },
-        holtResult?.let { Candidate("holt", it.second.sse, it.second.alpha, it.second.beta, null, it.second.rmse) },
-        hwResult?.let { Candidate("holtwinters", it.second.sse, it.second.alpha, it.second.beta, it.second.gamma, it.second.rmse) },
+    // T-209：ARIMA 最小档作为第四候选——**BIC 统一门**：
+    // 全候选按统一参数惩罚口径比较（σ̂²=SSE/(n−k)，BIC=n·ln σ̂²+k·ln n），
+    // 防「样本内 SSE 过拟合夺权」——ARIMA 需在扣除参数惩罚后仍显著占优才入选。
+    // （诚实边界：BIC 是近似——ES 族参数数为有效参数近似值）
+    val arimaFit = runCatching { Arima.fitGrid(values) }.getOrNull()
+    val esCandidates = listOfNotNull(
+        sesResult?.let { Triple("ses", it.second.sse, 2.0) },
+        holtResult?.let { Triple("holt", it.second.sse, 3.0) },
+        hwResult?.let { Triple("holtwinters", it.second.sse, (seasonPeriod + 3.0)) },
     )
+    val nObs = values.size
+    fun bic(sse: Double, k: Double): Double =
+        if (nObs - k <= 1) Double.MAX_VALUE else nObs * Math.log(sse / (nObs - k)) + k * Math.log(nObs.toDouble())
+    val arimaCand = arimaFit?.let {
+        val k = it.p + it.q + 2.0
+        // n>=30 才参与自动竞争：小样本上 HR 两阶段估计过拟合（样本内误差计数口径也与 ES 不齐），
+        // 显式调用 fitGrid 不受限——边界诚实写进 KDoc
+        if (nObs >= 30 && it.sse > 0 && nObs - k > 1) Triple("arima", it.sse, k) else null
+    }
+    // 两段裁决：ES 族内部保持 SSE 选择（原契约）；BIC 只裁决「ARIMA 是否入选」——
+    // ARIMA 须在统一参数惩罚口径下胜过 ES 最优者才入选（防样本内过拟合夺权）
+    val bestEs = esCandidates.minByOrNull { it.second }
+    val bicEs = bestEs?.let { bic(it.second, it.third) } ?: Double.MAX_VALUE
+    val bicArima = arimaCand?.let { bic(it.second, it.third) } ?: Double.MAX_VALUE
+    val winner = when {
+        bicArima < bicEs -> "arima"
+        bestEs != null -> bestEs.first
+        else -> "none"
+    }
+    // 按 BIC 胜者重建完整 Candidate（保 ES 原始 alpha/beta/gamma——重构曾误传 SSE 进 alpha 导致数值爆炸，实测教训）
+    val candidates = when (winner) {
+        "ses" -> listOfNotNull(
+            sesResult?.let { Candidate("ses", it.second.sse, it.second.alpha, null, null, it.second.rmse) })
+        "holt" -> listOfNotNull(
+            holtResult?.let { Candidate("holt", it.second.sse, it.second.alpha, it.second.beta, null, it.second.rmse) })
+        "holtwinters" -> listOfNotNull(
+            hwResult?.let { Candidate("holtwinters", it.second.sse, it.second.alpha, it.second.beta, it.second.gamma, it.second.rmse) })
+        "arima" -> listOfNotNull(
+            arimaCand?.let {
+                Candidate("arima", arimaFit!!.sse, Double.NaN, null, null, Math.sqrt(arimaFit.sigma2))
+            })
+        else -> emptyList()
+    }
     if (candidates.isNotEmpty()) {
         val best = candidates.minBy { it.sse }
         method = best.name
@@ -440,6 +479,10 @@ fun autoForecast(
 
     // 生成预测
     val forecast = when (method) {
+        "arima" -> {
+            val fit = arimaFit ?: error("arima 选中但拟合缺失（内部状态错误）")  // lint:allow zh-first（T-209 用户面中文错误，D19/D21 语言定位）
+            Arima.forecastPoints(values, fit, h)
+        }
         "ses" -> {
             // SES 最后一期拟合值就是下期预测
             val fitted = sesFitted(values, alpha)
